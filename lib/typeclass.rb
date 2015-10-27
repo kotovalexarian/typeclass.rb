@@ -1,5 +1,7 @@
 require 'typeclass/version'
 
-module Typeclass
-  # Your code goes here...
+##
+# Haskell type classes in Ruby.
+#
+class Typeclass
 end
