@@ -1,0 +1,8 @@
+Style/MultilineOperationIndentation:
+  Enabled: false
+
+Style/RescueModifier:
+  Enabled: false
+
+Style/AndOr:
+  Enabled: false
