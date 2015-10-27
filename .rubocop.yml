@@ -1,0 +1,12 @@
+AllCops:
+  Exclude:
+    - vendor/**/*
+
+Style/MultilineOperationIndentation:
+  Enabled: false
+
+Style/RescueModifier:
+  Enabled: false
+
+Style/AndOr:
+  Enabled: false
