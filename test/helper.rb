@@ -1,3 +1,6 @@
+# This should be on the top of the file
+require 'simplecov'
+
 # rubocop:disable Lint/HandleExceptions
 
 require 'typeclass'

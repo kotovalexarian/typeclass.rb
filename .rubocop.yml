@@ -1,3 +1,7 @@
+AllCops:
+  Exclude:
+    - vendor/**/*
+
 Style/MultilineOperationIndentation:
   Enabled: false
 
