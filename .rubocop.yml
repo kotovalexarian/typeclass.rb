@@ -1,0 +1,5 @@
+Style/MultilineOperationIndentation:
+  Enabled: false
+
+Style/AndOr:
+  Enabled: false
