@@ -1,4 +1,5 @@
 # TODO: refactoring
+# rubocop:disable Metrics/ClassLength
 # rubocop:disable Metrics/MethodLength
 # rubocop:disable Metrics/AbcSize
 # rubocop:disable Metrics/CyclomaticComplexity
@@ -10,9 +11,10 @@ require 'typeclass/version'
 # Haskell type classes in Ruby.
 #
 class Typeclass < Module
-  attr_accessor :params, :instances
+  attr_reader :params, :instances
 
   TYPES = [Class, Module]
+  BASE_CLASS = Object
 
   Instance = Struct.new(:params, :module) do
     def transmit(name, *args)
@@ -57,13 +59,29 @@ class Typeclass < Module
     instance_exec(&block)
   end
 
-  def fn(name, sig)
+  def fn(name, sig, &block)
     name = name.to_sym rescue (raise NameError)
     fail NameError if method_defined? name
     fail TypeError unless sig.is_a? Array
     fail TypeError unless sig.all? { |item| item.is_a? Symbol }
 
-    f = -> {}
+    typeclass = self
+
+    f = lambda do |*args|
+      fail ArgumentError if sig.length != args.count
+
+      instance = typeclass.instance sig, args
+
+      fail NotImplementedError unless instance
+
+      if instance.implements? name
+        instance.transmit name, *args
+      elsif block
+        block.call(*args)
+      else
+        fail NoMethodError
+      end
+    end
 
     begin
       define_singleton_method name, &f
@@ -71,6 +89,16 @@ class Typeclass < Module
     rescue
       raise NameError
     end
+  end
+
+  def instance(sig, args)
+    instances.each do |instance|
+      return instance if sig.each_with_index.all? do |key, i|
+        args[i].is_a? instance.params.data[key]
+      end
+    end
+
+    nil
   end
 
   def self.instance(typeclass, params, &block)
@@ -81,7 +109,7 @@ class Typeclass < Module
     fail ArgumentError unless (params.keys - typeclass.params.keys).empty?
 
     fail TypeError unless params.all? do |name, type|
-      type.ancestors.include? typeclass.params[name]
+      (type.ancestors + [BASE_CLASS]).include? typeclass.params[name]
     end
 
     params = Params.new(params)
