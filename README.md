@@ -10,6 +10,8 @@ Haskell type classes in Ruby.
 Examples
 --------
 
+File [examples/animals.rb](examples/animals.rb):
+
 ```ruby
 # This comes from Rust traits example
 # http://rustbyexample.com/trait.html
@@ -58,6 +60,8 @@ puts talk(dog) # Spike says "woof woof!"
 puts talk(sheep) # Dolly says "baaah"
 
 ```
+
+File [examples/eq.rb](examples/eq.rb):
 
 ```ruby
 require 'typeclass'

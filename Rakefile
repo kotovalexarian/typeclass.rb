@@ -43,6 +43,8 @@ task :examples do
     example = File.read example_filename
 
     <<-END
+File [#{example_filename}](#{example_filename}):
+
 ```ruby
 #{example}
 ```
