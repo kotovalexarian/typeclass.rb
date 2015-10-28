@@ -11,7 +11,7 @@ task default: [:test, :lint]
 
 require 'rake/testtask'
 Rake::TestTask.new do |t|
-  t.test_files = FileList['test/*.rb', 'examples/*.rb']
+  t.test_files = FileList['test/*_test.rb', 'examples/*.rb']
   t.libs += %w(lib test)
   t.warning = true
   t.verbose = true
