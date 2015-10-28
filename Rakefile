@@ -39,14 +39,15 @@ task :examples do
   EXPR = "#{SUBTITLE}\n#{'-' * SUBTITLE.length}\n"
   REGEXP = /#{EXPR}/
 
-  examples = Dir["#{EXAMPLES_DIR}/*"].map do |example_filename|
-    example = File.read example_filename
+  examples = Dir["#{EXAMPLES_DIR}/*"].each_with_index.map do |filename, index|
+    example = File.read filename
 
     <<-END
+#{"-----\n\n" unless index.zero?}File [#{filename}](#{filename}):
+
 ```ruby
-#{example}
-```
-    END
+#{example}```
+END
   end.join("\n")
 
   input = File.read README
