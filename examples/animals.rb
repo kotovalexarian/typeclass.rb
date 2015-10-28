@@ -1,6 +1,8 @@
 # This comes from Rust traits example
 # http://rustbyexample.com/trait.html
 
+require 'typeclass'
+
 Animal = Typeclass.new a: Object do
   fn :name, [:a]
   fn :noise, [:a]
@@ -39,5 +41,5 @@ include Animal
 dog = Dog['Spike']
 sheep = Sheep['Dolly']
 
-puts talk(dog)
-puts talk(sheep)
+puts talk(dog) # Spike says "woof woof!"
+puts talk(sheep) # Dolly says "baaah"
