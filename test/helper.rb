@@ -17,3 +17,8 @@ def should_raise(exception)
     fail
   end
 end
+
+def deftest(name, &block)
+  name = ('test_' + name.to_s).to_sym
+  define_method(name, &block)
+end
