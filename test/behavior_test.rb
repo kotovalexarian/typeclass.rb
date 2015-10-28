@@ -1,4 +1,4 @@
-require 'helper'
+require_relative 'helper'
 
 Eq = Typeclass.new a: Object do
   fn :equals, [:a, :a] do |a1, a2|

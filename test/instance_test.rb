@@ -1,6 +1,6 @@
 # rubocop:disable Style/BlockDelimiters
 
-require 'helper'
+require_relative 'helper'
 
 Bar = Typeclass.new a: Integer, b: Enumerable, c: Comparable do end
 

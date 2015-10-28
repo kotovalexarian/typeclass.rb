@@ -1,6 +1,6 @@
 # rubocop:disable Style/BlockDelimiters
 
-require 'helper'
+require_relative 'helper'
 
 ##
 # Incorrect arguments count.

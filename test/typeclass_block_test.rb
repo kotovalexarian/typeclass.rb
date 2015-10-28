@@ -1,4 +1,4 @@
-require 'helper'
+require_relative 'helper'
 
 Foo = Typeclass.new a: Object, b: Object do
   should_raise(ArgumentError) { fn }
