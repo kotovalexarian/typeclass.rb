@@ -11,7 +11,7 @@ task default: [:test, :lint]
 
 require 'rake/testtask'
 Rake::TestTask.new do |t|
-  t.pattern = 'test/*.rb'
+  t.test_files = FileList['test/*.rb', 'examples/*.rb']
   t.libs += %w(lib test)
   t.warning = true
   t.verbose = true
@@ -29,4 +29,28 @@ require 'github_changelog_generator/task'
 GitHubChangelogGenerator::RakeTask.new do |config|
   config.user = github_user
   config.project = github_project
+end
+
+desc 'Render examples to README'
+task :examples do
+  EXAMPLES_DIR = 'examples'
+  README = 'README.md'
+  SUBTITLE = 'Examples'
+  EXPR = "#{SUBTITLE}\n#{'-' * SUBTITLE.length}\n"
+  REGEXP = /#{EXPR}/
+
+  examples = Dir["#{EXAMPLES_DIR}/*"].map do |example_filename|
+    example = File.read example_filename
+
+    <<-END
+```ruby
+#{example}
+```
+    END
+  end.join("\n")
+
+  input = File.read README
+  pos = input =~ REGEXP
+  output = "#{input[0...pos]}#{EXPR}\n#{examples}"
+  File.write README, output
 end

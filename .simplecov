@@ -5,4 +5,7 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
   Coveralls::SimpleCov::Formatter,
 ]
 
-SimpleCov.start { add_filter '/test/' }
+SimpleCov.start do
+  add_filter '/test/'
+  add_filter '/examples/'
+end
