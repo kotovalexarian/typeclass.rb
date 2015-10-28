@@ -58,8 +58,9 @@ sheep = Sheep['Dolly']
 
 puts talk(dog) # Spike says "woof woof!"
 puts talk(sheep) # Dolly says "baaah"
-
 ```
+
+-----
 
 File [examples/eq.rb](examples/eq.rb):
 
@@ -110,5 +111,4 @@ c = Cmplx.scan '1.9 + 4.6i'
 
 puts "#{b} == #{a}" if equal(b, a) # 3.5 + 2.7i == 3.5 + 2.7i
 puts "#{c} != #{a}" if noteq(c, a) # 1.9 + 4.6i != 3.5 + 2.7i
-
 ```
