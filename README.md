@@ -6,3 +6,7 @@ Typeclass
 [![Coverage Status](https://coveralls.io/repos/braiden-vasco/typeclass.rb/badge.svg)](https://coveralls.io/r/braiden-vasco/typeclass.rb)
 
 Haskell type classes in Ruby.
+
+Examples
+--------
+
