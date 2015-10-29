@@ -127,9 +127,9 @@ class TestBehavior < Minitest::Test
       end
     end
 
-    should_raise(ArgumentError) { A.foo }
-    should_raise(NoMethodError) { A.foo 'a' }
-    should_raise(NotImplementedError) { A.foo 1 }
+    assert_raises(ArgumentError) { A.foo }
+    assert_raises(NoMethodError) { A.foo 'a' }
+    assert_raises(NotImplementedError) { A.foo 1 }
 
     A.bar
     A.car

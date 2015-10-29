@@ -1,28 +1,96 @@
+# rubocop:disable Style/BlockDelimiters
+
 require_relative 'helper'
 
 class TestTypeclassBlock < Minitest::Test
   deftest :all do
-    Foo = Typeclass.new a: Object, b: Object do
-      should_raise(ArgumentError) { fn }
-      should_raise(ArgumentError) { fn :foo }
-      should_raise(ArgumentError) { fn :foo, [:a], :a }
+    assert_raises(ArgumentError) {
+      Typeclass.new a: Object do
+        fn
+      end
+    }
 
-      should_raise(NameError) { fn nil, [:a] }
-      should_raise(NameError) { fn 1, [:a] }
+    assert_raises(ArgumentError) {
+      Typeclass.new a: Object do
+        fn :foo
+      end
+    }
 
-      fn :foo, [:a]
+    assert_raises(ArgumentError) {
+      Typeclass.new a: Object do
+        fn :foo, [:a], :a
+      end
+    }
 
-      should_raise(NameError) { fn :foo, [:a] }
+    assert_raises(NameError) {
+      Typeclass.new a: Object do
+        fn nil, [:a]
+      end
+    }
 
-      should_raise(TypeError) { fn :bar, nil }
-      should_raise(TypeError) { fn :bar, 1 }
-      should_raise(TypeError) { fn :bar, :a }
-      should_raise(TypeError) { fn :bar, 'a' }
+    assert_raises(NameError) {
+      Typeclass.new a: Object do
+        fn 1, [:a]
+      end
+    }
 
-      should_raise(TypeError) { fn :bar, [nil] }
-      should_raise(TypeError) { fn :bar, [1] }
-      should_raise(TypeError) { fn :bar, ['a'] }
-      should_raise(TypeError) { fn :bar, [:a, 1] }
+    assert_raises(NameError) {
+      Typeclass.new a: Object do
+        fn :foo, [:a]
+        fn :foo, [:a]
+      end
+    }
+
+    assert_raises(TypeError) {
+      Typeclass.new a: Object do
+        fn :bar, nil
+      end
+    }
+
+    assert_raises(TypeError) {
+      Typeclass.new a: Object do
+        fn :bar, 1
+      end
+    }
+
+    assert_raises(TypeError) {
+      Typeclass.new a: Object do
+        fn :bar, :a
+      end
+    }
+
+    assert_raises(TypeError) {
+      Typeclass.new a: Object do
+        fn :bar, 'a'
+      end
+    }
+
+    assert_raises(TypeError) {
+      Typeclass.new a: Object do
+        fn :bar, [nil]
+      end
+    }
+
+    assert_raises(TypeError) {
+      Typeclass.new a: Object do
+        fn :bar, [1]
+      end
+    }
+
+    assert_raises(TypeError) {
+      Typeclass.new a: Object do
+        fn :bar, ['a']
+      end
+    }
+
+    assert_raises(TypeError) {
+      Typeclass.new a: Object do
+        fn :bar, [:a, 1]
+      end
+    }
+
+    Foo = Typeclass.new a: Object do
+      fn :foo, []
     end
 
     Foo.singleton_method :foo

@@ -7,41 +7,41 @@ class TestNewTypeclass < Minitest::Test
     ##
     # Incorrect arguments count.
     #
-    should_raise(ArgumentError) { Typeclass.new }
-    should_raise(ArgumentError) { Typeclass.new 1, a: Object do end }
+    assert_raises(ArgumentError) { Typeclass.new }
+    assert_raises(ArgumentError) { Typeclass.new 1, a: Object do end }
 
     ##
     # No block given.
     #
-    should_raise(LocalJumpError) { Typeclass.new a: Object }
+    assert_raises(LocalJumpError) { Typeclass.new a: Object }
 
     ##
     # Parameters are not presented as Hash.
     #
-    should_raise(TypeError) { Typeclass.new nil do end }
-    should_raise(TypeError) { Typeclass.new :a do end }
-    should_raise(TypeError) { Typeclass.new 1 do end }
-    should_raise(TypeError) { Typeclass.new 'a' do end }
-    should_raise(TypeError) { Typeclass.new [:a, :b] do end }
+    assert_raises(TypeError) { Typeclass.new nil do end }
+    assert_raises(TypeError) { Typeclass.new :a do end }
+    assert_raises(TypeError) { Typeclass.new 1 do end }
+    assert_raises(TypeError) { Typeclass.new 'a' do end }
+    assert_raises(TypeError) { Typeclass.new [:a, :b] do end }
 
     ##
     # No parameters are presented.
     #
-    should_raise(ArgumentError) { Typeclass.new({}) do end }
+    assert_raises(ArgumentError) { Typeclass.new({}) do end }
 
     ##
     # Parameter name in not a symbol.
     #
-    should_raise(TypeError) { Typeclass.new 'a' => Object do end }
+    assert_raises(TypeError) { Typeclass.new 'a' => Object do end }
 
     ##
     # Parameter has incorrect type.
     #
-    should_raise(TypeError) { Typeclass.new a: nil do end }
-    should_raise(TypeError) { Typeclass.new a: Object, b: :a do end }
-    should_raise(TypeError) { Typeclass.new a: 1 do end }
-    should_raise(TypeError) { Typeclass.new a: 'Object' do end }
-    should_raise(TypeError) { Typeclass.new a: [Symbol, String] do end }
+    assert_raises(TypeError) { Typeclass.new a: nil do end }
+    assert_raises(TypeError) { Typeclass.new a: Object, b: :a do end }
+    assert_raises(TypeError) { Typeclass.new a: 1 do end }
+    assert_raises(TypeError) { Typeclass.new a: 'Object' do end }
+    assert_raises(TypeError) { Typeclass.new a: [Symbol, String] do end }
 
     ##
     # Typeclass is module.

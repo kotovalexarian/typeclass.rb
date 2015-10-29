@@ -14,51 +14,51 @@ class TestInstance < Minitest::Test
     ##
     # Incorrect arguments count.
     #
-    should_raise(ArgumentError) { Typeclass.instance do end }
-    should_raise(ArgumentError) { Typeclass.instance Baz do end }
-    should_raise(ArgumentError) {
+    assert_raises(ArgumentError) { Typeclass.instance do end }
+    assert_raises(ArgumentError) { Typeclass.instance Baz do end }
+    assert_raises(ArgumentError) {
       Typeclass.instance Baz, { a: Integer }, 1 do end
     }
 
     ##
     # No block given.
     #
-    should_raise(LocalJumpError) { Typeclass.instance Baz, a: Integer }
+    assert_raises(LocalJumpError) { Typeclass.instance Baz, a: Integer }
 
     ##
     # First argument is not instance of Typeclass.
     #
-    should_raise(TypeError) { Typeclass.instance nil, a: Integer do end }
-    should_raise(TypeError) { Typeclass.instance :a, a: Integer do end }
-    should_raise(TypeError) { Typeclass.instance 1, a: Integer do end }
-    should_raise(TypeError) { Typeclass.instance 'a', a: Integer do end }
-    should_raise(TypeError) { Typeclass.instance [], a: Integer do end }
+    assert_raises(TypeError) { Typeclass.instance nil, a: Integer do end }
+    assert_raises(TypeError) { Typeclass.instance :a, a: Integer do end }
+    assert_raises(TypeError) { Typeclass.instance 1, a: Integer do end }
+    assert_raises(TypeError) { Typeclass.instance 'a', a: Integer do end }
+    assert_raises(TypeError) { Typeclass.instance [], a: Integer do end }
 
     ##
     # Parameters are not presented as Hash.
     #
-    should_raise(TypeError) { Typeclass.instance Baz, nil do end }
-    should_raise(TypeError) { Typeclass.instance Baz, :a do end }
-    should_raise(TypeError) { Typeclass.instance Baz, 1 do end }
-    should_raise(TypeError) { Typeclass.instance Baz, 'a' do end }
-    should_raise(TypeError) { Typeclass.instance Baz, [:a, :b] do end }
+    assert_raises(TypeError) { Typeclass.instance Baz, nil do end }
+    assert_raises(TypeError) { Typeclass.instance Baz, :a do end }
+    assert_raises(TypeError) { Typeclass.instance Baz, 1 do end }
+    assert_raises(TypeError) { Typeclass.instance Baz, 'a' do end }
+    assert_raises(TypeError) { Typeclass.instance Baz, [:a, :b] do end }
 
     ##
     # Parameter names do not match typeclass parameter names.
     #
-    should_raise(ArgumentError) { Typeclass.instance Baz, {} do end }
-    should_raise(ArgumentError) { Typeclass.instance Baz, b: Integer do end }
-    should_raise(ArgumentError) {
+    assert_raises(ArgumentError) { Typeclass.instance Baz, {} do end }
+    assert_raises(ArgumentError) { Typeclass.instance Baz, b: Integer do end }
+    assert_raises(ArgumentError) {
       Typeclass.instance Baz, a: Integer, b: Integer do end
     }
-    should_raise(ArgumentError) {
+    assert_raises(ArgumentError) {
       Typeclass.instance Bar, a: Integer, b: Array do end
     }
 
     ##
     # Typeclass parameter types are no ancestors for instance parameter types.
     #
-    should_raise(TypeError) {
+    assert_raises(TypeError) {
       Typeclass.instance Bar, a: Integer, b: Array, c: Object do end
     }
 
@@ -68,7 +68,7 @@ class TestInstance < Minitest::Test
     Car = Typeclass.new a: Object, b: Object do end
 
     Typeclass.instance Car, a: Numeric, b: Integer do end
-    should_raise(TypeError) {
+    assert_raises(TypeError) {
       Typeclass.instance Car, a: Integer, b: Numeric do end
     }
 
