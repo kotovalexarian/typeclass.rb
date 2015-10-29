@@ -3,7 +3,7 @@
 require_relative 'helper'
 
 class TestBehavior < Minitest::Test
-  deftest :all do
+  deftest :'1' do
     Eq = Typeclass.new a: Object do
       fn :equals, [:a, :a] do |a1, a2|
         !noteq(a1, a2)
@@ -14,6 +14,29 @@ class TestBehavior < Minitest::Test
       end
     end
 
+    Eq1 = Struct.new(:n)
+    Eq2 = Struct.new(:n)
+
+    Typeclass.instance Eq, a: Eq1 do
+      def equals(a1, a2)
+        a1.n == a2.n
+      end
+    end
+
+    Typeclass.instance Eq, a: Eq2 do
+      def noteq(a1, a2)
+        a1.n != a2.n
+      end
+    end
+
+    assert_equal false, Eq.equals(Eq1[1], Eq1[2])
+    assert_equal true, Eq.noteq(Eq1[1], Eq1[2])
+
+    assert_equal false, Eq.equals(Eq2[1], Eq2[2])
+    assert_equal true, Eq.noteq(Eq2[1], Eq2[2])
+  end
+
+  deftest :'2' do
     Ord = Typeclass.new a: Object do
       fn :cmp, [:a, :a]
 
@@ -41,27 +64,6 @@ class TestBehavior < Minitest::Test
         cmp(a1, a2) >= 0
       end
     end
-
-    Eq1 = Struct.new(:n)
-    Eq2 = Struct.new(:n)
-
-    Typeclass.instance Eq, a: Eq1 do
-      def equals(a1, a2)
-        a1.n == a2.n
-      end
-    end
-
-    Typeclass.instance Eq, a: Eq2 do
-      def noteq(a1, a2)
-        a1.n != a2.n
-      end
-    end
-
-    assert_equal false, Eq.equals(Eq1[1], Eq1[2])
-    assert_equal true, Eq.noteq(Eq1[1], Eq1[2])
-
-    assert_equal false, Eq.equals(Eq2[1], Eq2[2])
-    assert_equal true, Eq.noteq(Eq2[1], Eq2[2])
 
     module Bool; end
 
@@ -97,7 +99,9 @@ class TestBehavior < Minitest::Test
 
     assert_equal true, Ord.greateq(true, true)
     assert_equal true, Ord.greateq(true, false)
+  end
 
+  deftest :choose_correct_instance_even_if_was_is_declared_later do
     Tst = Typeclass.new a: Object, b: Object do
       fn :foo, [:a, :b]
     end
@@ -115,7 +119,9 @@ class TestBehavior < Minitest::Test
     end
 
     assert_equal :second, Tst.foo(1.4, 1)
+  end
 
+  deftest :method_instantiates_correctly do
     A = Typeclass.new a: Object do
       fn :foo, [:a]
 
@@ -135,7 +141,9 @@ class TestBehavior < Minitest::Test
 
     assert_equal :bar_result, A.bar
     assert_equal :car_result, A.car
+  end
 
+  deftest :method_overloads_correclty do
     B = Typeclass.new a: Object do
       fn :foo, [] do
         fail

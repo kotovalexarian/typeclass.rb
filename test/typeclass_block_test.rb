@@ -3,7 +3,7 @@
 require_relative 'helper'
 
 class TestTypeclassBlock < Minitest::Test
-  deftest :all do
+  deftest :fn_arguments_count do
     assert_raises(ArgumentError) {
       Typeclass.new a: Object do
         fn
@@ -21,7 +21,9 @@ class TestTypeclassBlock < Minitest::Test
         fn :foo, [:a], :a
       end
     }
+  end
 
+  deftest :fn_method_name do
     assert_raises(NameError) {
       Typeclass.new a: Object do
         fn nil, [:a]
@@ -40,7 +42,9 @@ class TestTypeclassBlock < Minitest::Test
         fn :foo, [:a]
       end
     }
+  end
 
+  deftest :fn_method_arguments_list do
     assert_raises(TypeError) {
       Typeclass.new a: Object do
         fn :bar, nil
@@ -88,7 +92,9 @@ class TestTypeclassBlock < Minitest::Test
         fn :bar, [:a, 1]
       end
     }
+  end
 
+  deftest :fn_created_method do
     Foo = Typeclass.new a: Object do
       fn :foo, []
     end
