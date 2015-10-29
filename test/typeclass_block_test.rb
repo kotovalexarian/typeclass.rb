@@ -1,6 +1,6 @@
 require_relative 'helper'
 
-class TestTypeclassBlock
+class TestTypeclassBlock < Minitest::Test
   deftest :all do
     Foo = Typeclass.new a: Object, b: Object do
       should_raise(ArgumentError) { fn }
@@ -29,5 +29,3 @@ class TestTypeclassBlock
     Foo.method :foo
   end
 end
-
-TestTypeclassBlock.new.test_all

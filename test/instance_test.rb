@@ -2,7 +2,7 @@
 
 require_relative 'helper'
 
-class TestInstance
+class TestInstance < Minitest::Test
   deftest :all do
     Bar = Typeclass.new a: Integer, b: Enumerable, c: Comparable do end
 
@@ -81,5 +81,3 @@ class TestInstance
     fail unless Cdr.instances == [cdr2, cdr3, cdr1]
   end
 end
-
-TestInstance.new.test_all

@@ -2,7 +2,7 @@
 
 require_relative 'helper'
 
-class TestBehavior
+class TestBehavior < Minitest::Test
   deftest :all do
     Eq = Typeclass.new a: Object do
       fn :equals, [:a, :a] do |a1, a2|
@@ -148,5 +148,3 @@ class TestBehavior
     B.foo
   end
 end
-
-TestBehavior.new.test_all

@@ -3,6 +3,8 @@ require 'simplecov'
 
 # rubocop:disable Lint/HandleExceptions
 
+require 'minitest/autorun'
+
 require 'typeclass'
 
 def should_raise(exception)

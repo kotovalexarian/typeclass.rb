@@ -2,7 +2,7 @@
 
 require_relative 'helper'
 
-class TestNewTypeclass
+class TestNewTypeclass < Minitest::Test
   deftest :all do
     ##
     # Incorrect arguments count.
@@ -51,5 +51,3 @@ class TestNewTypeclass
     Typeclass.new a: Integer, b: String do end
   end
 end
-
-TestNewTypeclass.new.test_all
