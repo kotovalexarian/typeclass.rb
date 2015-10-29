@@ -1,11 +1,12 @@
 # TODO: refactoring
-# rubocop:disable Metrics/ClassLength
 # rubocop:disable Metrics/MethodLength
 # rubocop:disable Metrics/AbcSize
 # rubocop:disable Metrics/CyclomaticComplexity
 # rubocop:disable Metrics/PerceivedComplexity
 
 require 'typeclass/version'
+require 'typeclass/params'
+require 'typeclass/instance'
 
 ##
 # Haskell type classes in Ruby.
@@ -15,29 +16,6 @@ class Typeclass < Module
 
   TYPES = [Class, Module]
   BASE_CLASS = Object
-
-  Instance = Struct.new(:params, :module) do
-    def transmit(name, *args)
-      self.module.send name, *args
-    end
-
-    def implements?(name)
-      self.module.singleton_methods.include? name
-    end
-  end
-
-  Params = Struct.new(:data) do
-    def >(other)
-      data.any? do |name, type|
-        other_type = other.data[name]
-        other_type.ancestors.include? type if type != other_type
-      end
-    end
-
-    def collision?(other)
-      self > other && other > self
-    end
-  end
 
   def initialize(params, &block)
     fail LocalJumpError, 'no block given' unless block_given?
