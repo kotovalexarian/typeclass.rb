@@ -34,10 +34,6 @@ class Typeclass < Module
       end
     end
 
-    def <(other)
-      !(self > other)
-    end
-
     def collision?(other)
       self > other && other > self
     end
@@ -144,10 +140,9 @@ class Typeclass < Module
 
       fail TypeError if current_params.collision? new_params
 
-      if index.nil?
-        index = i if current_params > new_params
-      else
-        fail TypeError if current_params < new_params
+      if index.nil? && current_params > new_params
+        index = i
+        break
       end
     end
 
