@@ -5,10 +5,6 @@ require_relative 'helper'
 class TestInstance < Minitest::Test
   deftest :all do
     Bar = Typeclass.new a: Integer, b: Enumerable, c: Comparable do end
-
-    Typeclass.instance Bar, a: Integer, b: Hash, c: Integer do end
-    Typeclass.instance Bar, a: Integer, b: Array, c: Integer do end
-
     Baz = Typeclass.new a: Object do end
 
     ##
@@ -68,16 +64,26 @@ class TestInstance < Minitest::Test
     Car = Typeclass.new a: Object, b: Object do end
 
     Typeclass.instance Car, a: Numeric, b: Integer do end
+
     assert_raises(TypeError) {
       Typeclass.instance Car, a: Integer, b: Numeric do end
     }
 
+    ##
+    # Instances order is correct.
+    #
     Cdr = Typeclass.new a: Object, b: Object do end
 
     cdr1 = Typeclass.instance Cdr, a: Numeric, b: Numeric do end
     cdr2 = Typeclass.instance Cdr, a: Integer, b: Integer do end
     cdr3 = Typeclass.instance Cdr, a: Integer, b: Numeric do end
 
-    fail unless Cdr.instances == [cdr2, cdr3, cdr1]
+    assert_equal [cdr2, cdr3, cdr1], Cdr.instances
+
+    ##
+    # Instances are created successful.
+    #
+    Typeclass.instance Bar, a: Integer, b: Hash, c: Integer do end
+    Typeclass.instance Bar, a: Integer, b: Array, c: Integer do end
   end
 end

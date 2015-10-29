@@ -46,8 +46,11 @@ class TestNewTypeclass < Minitest::Test
     ##
     # Typeclass is module.
     #
-    fail unless (Typeclass.new a: Object do end).is_a? Module
+    assert_kind_of Module, (Typeclass.new a: Object do end)
 
+    ##
+    # Typeclass is created successful.
+    #
     Typeclass.new a: Integer, b: String do end
   end
 end

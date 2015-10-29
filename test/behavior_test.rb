@@ -57,11 +57,11 @@ class TestBehavior < Minitest::Test
       end
     end
 
-    fail unless Eq.equals(Eq1[1], Eq1[2]) == false
-    fail unless Eq.noteq(Eq1[1], Eq1[2]) == true
+    assert_equal false, Eq.equals(Eq1[1], Eq1[2])
+    assert_equal true, Eq.noteq(Eq1[1], Eq1[2])
 
-    fail unless Eq.equals(Eq2[1], Eq2[2]) == false
-    fail unless Eq.noteq(Eq2[1], Eq2[2]) == true
+    assert_equal false, Eq.equals(Eq2[1], Eq2[2])
+    assert_equal true, Eq.noteq(Eq2[1], Eq2[2])
 
     module Bool; end
 
@@ -81,22 +81,22 @@ class TestBehavior < Minitest::Test
       end
     end
 
-    fail unless Ord.equals(false, false) == true &&
-                Ord.equals(false, true) == false &&
-                Ord.noteq(true, true) == false &&
-                Ord.noteq(true, false) == true &&
+    assert_equal true, Ord.equals(false, false)
+    assert_equal false, Ord.equals(false, true)
+    assert_equal false, Ord.noteq(true, true)
+    assert_equal true, Ord.noteq(true, false)
 
-                Ord.lesser(false, true) == true &&
-                Ord.lesser(true, true) == false &&
+    assert_equal true, Ord.lesser(false, true)
+    assert_equal false, Ord.lesser(true, true)
 
-                Ord.greater(false, true) == false &&
-                Ord.greater(false, false) == false &&
+    assert_equal false, Ord.greater(false, true)
+    assert_equal false, Ord.greater(false, false)
 
-                Ord.lesseq(false, false) == true &&
-                Ord.lesseq(true, false) == false &&
+    assert_equal true, Ord.lesseq(false, false)
+    assert_equal false, Ord.lesseq(true, false)
 
-                Ord.greateq(true, true) == true &&
-                Ord.greateq(true, false) == true
+    assert_equal true, Ord.greateq(true, true)
+    assert_equal true, Ord.greateq(true, false)
 
     Tst = Typeclass.new a: Object, b: Object do
       fn :foo, [:a, :b]
