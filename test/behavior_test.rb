@@ -110,20 +110,22 @@ class TestBehavior < Minitest::Test
 
     Typeclass.instance Tst, a: Numeric, b: Integer do
       def foo(_a, _b)
+        :second
       end
     end
 
-    Tst.foo(1.4, 1)
+    assert_equal :second, Tst.foo(1.4, 1)
 
     A = Typeclass.new a: Object do
       fn :foo, [:a]
 
       fn :bar, []
-      fn :car, [] {}
+      fn :car, [] { :car_result }
     end
 
     Typeclass.instance A, a: String do
       def bar
+        :bar_result
       end
     end
 
@@ -131,8 +133,8 @@ class TestBehavior < Minitest::Test
     assert_raises(NoMethodError) { A.foo 'a' }
     assert_raises(NotImplementedError) { A.foo 1 }
 
-    A.bar
-    A.car
+    assert_equal :bar_result, A.bar
+    assert_equal :car_result, A.car
 
     B = Typeclass.new a: Object do
       fn :foo, [] do
@@ -142,9 +144,10 @@ class TestBehavior < Minitest::Test
 
     Typeclass.instance B, a: Object do
       def foo
+        :overloaded
       end
     end
 
-    B.foo
+    assert_equal :overloaded, B.foo
   end
 end

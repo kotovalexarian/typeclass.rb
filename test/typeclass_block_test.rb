@@ -93,7 +93,7 @@ class TestTypeclassBlock < Minitest::Test
       fn :foo, []
     end
 
-    Foo.singleton_method :foo
-    Foo.method :foo
+    assert_kind_of Method, Foo.singleton_method(:foo)
+    assert_kind_of Method, Foo.method(:foo)
   end
 end
