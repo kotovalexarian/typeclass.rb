@@ -7,14 +7,17 @@ github_user, github_project =
 
 require 'bundler/gem_tasks'
 
-task default: [:test, :lint]
+task default: [:tests, :lint]
+
+task tests: ['examples:test', :test]
 
 require 'rake/testtask'
+Rake::TestTask.new('examples:test') do |t|
+  t.pattern = 'examples/*.rb'
+end
+
 Rake::TestTask.new do |t|
-  t.test_files = FileList['test/*.rb', 'examples/*.rb']
-  t.libs += %w(lib test)
-  t.warning = true
-  t.verbose = true
+  t.pattern = 'test/*_test.rb'
 end
 
 task lint: [:rubocop]
