@@ -71,7 +71,7 @@ class Typeclass < Module
     fail LocalJumpError, 'no block given' unless block_given?
     fail TypeError unless typeclass.is_a? Typeclass
 
-    Typeclass.check_raw_params! raw_params, typeclass.constraints
+    Instance::Params.check_raw_params! raw_params, typeclass.constraints
 
     params = Instance::Params.new(raw_params)
     index = get_index(typeclass, params)
@@ -122,16 +122,6 @@ class Typeclass < Module
       name.is_a? Symbol or
         fail TypeError, 'parameter name is not a Symbol'
       fail TypeError unless Typeclass.type? type
-    end
-  end
-
-  def self.check_raw_params!(raw_params, constraints)
-    fail TypeError unless raw_params.is_a? Hash
-    fail ArgumentError unless (constraints.keys - raw_params.keys).empty?
-    fail ArgumentError unless (raw_params.keys - constraints.keys).empty?
-
-    fail TypeError unless raw_params.all? do |name, type|
-      (type.ancestors + [BASE_CLASS]).include? constraints[name]
     end
   end
 end
