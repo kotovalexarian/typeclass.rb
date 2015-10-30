@@ -1,3 +1,5 @@
+require 'typeclass/instance/params'
+
 class Typeclass < Module
   ##
   # Type class instance

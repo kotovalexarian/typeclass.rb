@@ -5,7 +5,6 @@
 # rubocop:disable Metrics/PerceivedComplexity
 
 require 'typeclass/version'
-require 'typeclass/params'
 require 'typeclass/instance'
 
 ##
@@ -84,7 +83,7 @@ class Typeclass < Module
       (type.ancestors + [BASE_CLASS]).include? typeclass.params[name]
     end
 
-    params = Params.new(params)
+    params = Instance::Params.new(params)
     index = get_index(typeclass, params)
 
     mod = Module.new
