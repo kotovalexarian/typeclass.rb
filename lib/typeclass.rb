@@ -74,7 +74,7 @@ class Typeclass < Module
     Instance::Params.check_raw_params! raw_params, typeclass.constraints
 
     params = Instance::Params.new(raw_params)
-    index = get_index(typeclass, params)
+    index = get_index! typeclass, params
 
     hidden_module = Instance::HiddenModule.new(typeclass, &block)
 
@@ -88,7 +88,7 @@ class Typeclass < Module
     TYPES.any? { |type| object.is_a? type }
   end
 
-  def self.get_index(typeclass, new_params)
+  def self.get_index!(typeclass, new_params)
     index = nil
 
     (0..typeclass.instances.count).each do |i|
