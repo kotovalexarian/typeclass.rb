@@ -51,12 +51,8 @@ class Typeclass < Module
       end
     end
 
-    begin
-      define_singleton_method name, &f
-      define_method name, &f
-    rescue
-      raise NameError
-    end
+    define_singleton_method name, &f
+    define_method name, &f
   end
 
   def instance(sig, args)
