@@ -1,7 +1,5 @@
-# TODO: refactoring
-# rubocop:disable Metrics/MethodLength
-
 require 'typeclass/version'
+require 'typeclass/function'
 require 'typeclass/instance'
 
 ##
@@ -30,28 +28,10 @@ class Typeclass < Module
     fail TypeError unless sig.is_a? Array
     fail TypeError unless sig.all? { |item| item.is_a? Symbol }
 
-    f = Typeclass.fn self, name, sig, &block
+    p = Function.new(self, name, sig, &block).to_proc
 
-    define_singleton_method name, &f
-    define_method name, &f
-  end
-
-  def self.fn(typeclass, name, sig, &block)
-    lambda do |*args|
-      fail ArgumentError if sig.length != args.count
-
-      instance = typeclass.instance sig, args
-
-      fail NotImplementedError unless instance
-
-      if instance.implements? name
-        instance.transmit name, *args
-      elsif block
-        block.call(*args)
-      else
-        fail NoMethodError
-      end
-    end
+    define_singleton_method name, &p
+    define_method name, &p
   end
 
   def instance(sig, args)
