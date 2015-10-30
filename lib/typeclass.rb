@@ -1,8 +1,5 @@
 # TODO: refactoring
 # rubocop:disable Metrics/MethodLength
-# rubocop:disable Metrics/AbcSize
-# rubocop:disable Metrics/CyclomaticComplexity
-# rubocop:disable Metrics/PerceivedComplexity
 
 require 'typeclass/version'
 require 'typeclass/instance'
@@ -33,9 +30,14 @@ class Typeclass < Module
     fail TypeError unless sig.is_a? Array
     fail TypeError unless sig.all? { |item| item.is_a? Symbol }
 
-    typeclass = self
+    f = Typeclass.fn self, name, sig, &block
 
-    f = lambda do |*args|
+    define_singleton_method name, &f
+    define_method name, &f
+  end
+
+  def self.fn(typeclass, name, sig, &block)
+    lambda do |*args|
       fail ArgumentError if sig.length != args.count
 
       instance = typeclass.instance sig, args
@@ -50,9 +52,6 @@ class Typeclass < Module
         fail NoMethodError
       end
     end
-
-    define_singleton_method name, &f
-    define_method name, &f
   end
 
   def instance(sig, args)
