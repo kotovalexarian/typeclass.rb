@@ -11,17 +11,17 @@ require 'typeclass/instance'
 # Haskell type classes in Ruby.
 #
 class Typeclass < Module
-  attr_reader :params, :instances
+  attr_reader :constraints, :instances
 
   TYPES = [Class, Module]
   BASE_CLASS = Object
 
-  def initialize(params, &block)
+  def initialize(constraints, &block)
     fail LocalJumpError, 'no block given' unless block_given?
-    fail TypeError unless params.is_a? Hash
-    fail ArgumentError if params.empty?
+    fail TypeError unless constraints.is_a? Hash
+    fail ArgumentError if constraints.empty?
 
-    @params = params.each do |name, type|
+    @constraints = constraints.each do |name, type|
       name.is_a? Symbol or
         fail TypeError, 'parameter name is not a Symbol'
       fail TypeError unless Typeclass.type? type
@@ -76,11 +76,11 @@ class Typeclass < Module
     fail LocalJumpError, 'no block given' unless block_given?
     fail TypeError unless typeclass.is_a? Typeclass
     fail TypeError unless params.is_a? Hash
-    fail ArgumentError unless (typeclass.params.keys - params.keys).empty?
-    fail ArgumentError unless (params.keys - typeclass.params.keys).empty?
+    fail ArgumentError unless (typeclass.constraints.keys - params.keys).empty?
+    fail ArgumentError unless (params.keys - typeclass.constraints.keys).empty?
 
     fail TypeError unless params.all? do |name, type|
-      (type.ancestors + [BASE_CLASS]).include? typeclass.params[name]
+      (type.ancestors + [BASE_CLASS]).include? typeclass.constraints[name]
     end
 
     params = Instance::Params.new(params)
