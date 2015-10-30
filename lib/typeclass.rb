@@ -18,15 +18,10 @@ class Typeclass < Module
 
   def initialize(constraints, &block)
     fail LocalJumpError, 'no block given' unless block_given?
-    fail TypeError unless constraints.is_a? Hash
-    fail ArgumentError if constraints.empty?
 
-    @constraints = constraints.each do |name, type|
-      name.is_a? Symbol or
-        fail TypeError, 'parameter name is not a Symbol'
-      fail TypeError unless Typeclass.type? type
-    end
+    Typeclass.check_constraints! constraints
 
+    @constraints = constraints
     @instances = []
 
     instance_exec(&block)
@@ -117,6 +112,17 @@ class Typeclass < Module
     end
 
     index
+  end
+
+  def self.check_constraints!(constraints)
+    fail TypeError unless constraints.is_a? Hash
+    fail ArgumentError if constraints.empty?
+
+    constraints.each do |name, type|
+      name.is_a? Symbol or
+        fail TypeError, 'parameter name is not a Symbol'
+      fail TypeError unless Typeclass.type? type
+    end
   end
 
   def self.check_raw_params!(raw_params, constraints)
