@@ -68,7 +68,7 @@ class TestInstance < Minitest::Test
     cdr2 = Typeclass.instance Cdr, a: Integer, b: Integer do end
     cdr3 = Typeclass.instance Cdr, a: Integer, b: Numeric do end
 
-    assert_equal [cdr2, cdr3, cdr1], Cdr.instances
+    assert_equal [cdr2, cdr3, cdr1], Cdr.send(:instances)
   end
 
   deftest :instances_are_created_successful do

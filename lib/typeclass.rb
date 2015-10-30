@@ -6,11 +6,6 @@ require 'typeclass/instance'
 # Haskell type classes in Ruby.
 #
 class Typeclass < Module
-  attr_reader :constraints, :instances
-
-  TYPES = [Class, Module]
-  BASE_CLASS = Object
-
   def initialize(constraints, &block)
     fail LocalJumpError, 'no block given' unless block_given?
 
@@ -21,6 +16,37 @@ class Typeclass < Module
 
     instance_exec(&block)
   end
+
+  def instance(raw_params, &block)
+    fail LocalJumpError, 'no block given' unless block_given?
+
+    Instance::Params.check_raw_params! raw_params, constraints
+
+    params = Instance::Params.new(raw_params)
+    index = get_index! params
+
+    hidden_module = Instance::HiddenModule.new(self, &block)
+
+    instance = Instance.new(params, hidden_module)
+    instances.insert index, instance
+
+    instance
+  end
+
+  def get_instance(sig, args)
+    instances.each do |instance|
+      return instance if instance.matched_by? sig, args
+    end
+
+    nil
+  end
+
+private
+
+  TYPES = [Class, Module]
+  BASE_CLASS = Object
+
+  attr_reader :constraints, :instances
 
   def fn(name, sig, &block)
     name = name.to_sym rescue (raise NameError)
@@ -34,42 +60,23 @@ class Typeclass < Module
     define_method name, &p
   end
 
-  def instance(sig, args)
-    instances.each do |instance|
-      return instance if instance.matched_by? sig, args
-    end
-
-    nil
-  end
-
-  def self.instance(typeclass, raw_params, &block)
-    fail LocalJumpError, 'no block given' unless block_given?
-    fail TypeError unless typeclass.is_a? Typeclass
-
-    Instance::Params.check_raw_params! raw_params, typeclass.constraints
-
-    params = Instance::Params.new(raw_params)
-    index = get_index! typeclass, params
-
-    hidden_module = Instance::HiddenModule.new(typeclass, &block)
-
-    instance = Instance.new(params, hidden_module)
-    typeclass.instances.insert index, instance
-
-    instance
-  end
-
-  def self.type?(object)
-    TYPES.any? { |type| object.is_a? type }
-  end
-
-  def self.get_index!(typeclass, params)
-    (0..typeclass.instances.count).each do |i|
-      instance = typeclass.instances[i]
+  def get_index!(params)
+    (0..instances.count).each do |i|
+      instance = instances[i]
       return i if instance.nil?
       fail TypeError if instance.params.collision? params
       return i if instance.params > params
     end
+  end
+
+  def self.instance(typeclass, raw_params, &block)
+    fail TypeError unless typeclass.is_a? Typeclass
+
+    typeclass.instance raw_params, &block
+  end
+
+  def self.type?(object)
+    TYPES.any? { |type| object.is_a? type }
   end
 
   def self.check_constraints!(constraints)

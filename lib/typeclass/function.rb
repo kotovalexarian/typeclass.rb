@@ -13,7 +13,7 @@ class Typeclass < Module
     def call(*args) # rubocop:disable Metrics/AbcSize
       fail ArgumentError if sig.length != args.count
 
-      instance = typeclass.instance sig, args
+      instance = typeclass.get_instance sig, args
 
       fail NotImplementedError unless instance
 
