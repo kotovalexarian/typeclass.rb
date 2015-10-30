@@ -67,9 +67,7 @@ class Typeclass < Module
 
   def instance(sig, args)
     instances.each do |instance|
-      return instance if sig.each_with_index.all? do |key, i|
-        args[i].is_a? instance.params[key]
-      end
+      return instance if instance.matched_by? sig, args
     end
 
     nil
