@@ -88,28 +88,13 @@ class Typeclass < Module
     TYPES.any? { |type| object.is_a? type }
   end
 
-  def self.get_index!(typeclass, new_params)
-    index = nil
-
+  def self.get_index!(typeclass, params)
     (0..typeclass.instances.count).each do |i|
       instance = typeclass.instances[i]
-
-      if instance.nil?
-        index = i if index.nil?
-        break
-      end
-
-      current_params = instance.params
-
-      fail TypeError if current_params.collision? new_params
-
-      if index.nil? && current_params > new_params
-        index = i
-        break
-      end
+      return i if instance.nil?
+      fail TypeError if instance.params.collision? params
+      return i if instance.params > params
     end
-
-    index
   end
 
   def self.check_constraints!(constraints)
