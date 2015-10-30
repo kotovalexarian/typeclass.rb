@@ -72,18 +72,13 @@ class Typeclass < Module
     nil
   end
 
-  def self.instance(typeclass, params, &block)
+  def self.instance(typeclass, raw_params, &block)
     fail LocalJumpError, 'no block given' unless block_given?
     fail TypeError unless typeclass.is_a? Typeclass
-    fail TypeError unless params.is_a? Hash
-    fail ArgumentError unless (typeclass.constraints.keys - params.keys).empty?
-    fail ArgumentError unless (params.keys - typeclass.constraints.keys).empty?
 
-    fail TypeError unless params.all? do |name, type|
-      (type.ancestors + [BASE_CLASS]).include? typeclass.constraints[name]
-    end
+    Typeclass.check_raw_params! raw_params, typeclass.constraints
 
-    params = Instance::Params.new(params)
+    params = Instance::Params.new(raw_params)
     index = get_index(typeclass, params)
 
     mod = Module.new
@@ -122,5 +117,15 @@ class Typeclass < Module
     end
 
     index
+  end
+
+  def self.check_raw_params!(raw_params, constraints)
+    fail TypeError unless raw_params.is_a? Hash
+    fail ArgumentError unless (constraints.keys - raw_params.keys).empty?
+    fail ArgumentError unless (raw_params.keys - constraints.keys).empty?
+
+    fail TypeError unless raw_params.all? do |name, type|
+      (type.ancestors + [BASE_CLASS]).include? constraints[name]
+    end
   end
 end
