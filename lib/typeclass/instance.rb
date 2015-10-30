@@ -1,23 +1,24 @@
 require 'typeclass/instance/params'
+require 'typeclass/instance/hidden_module'
 
 class Typeclass < Module
   ##
   # Type class instance
   #
   class Instance
-    attr_reader :params, :module
+    attr_reader :params, :hidden_module
 
-    def initialize(params, module_)
+    def initialize(params, hidden_module)
       @params = params
-      @module = module_
+      @hidden_module = hidden_module
     end
 
     def transmit(name, *args)
-      self.module.send name, *args
+      hidden_module.module.send name, *args
     end
 
     def implements?(name)
-      self.module.singleton_methods.include? name
+      hidden_module.module.singleton_methods.include? name
     end
 
     def matched_by?(sig, args)

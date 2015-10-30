@@ -76,11 +76,9 @@ class Typeclass < Module
     params = Instance::Params.new(raw_params)
     index = get_index(typeclass, params)
 
-    mod = Module.new
-    mod.include typeclass
-    mod.instance_exec(&block)
+    hidden_module = Instance::HiddenModule.new(typeclass, &block)
 
-    instance = Instance.new(params, mod)
+    instance = Instance.new(params, hidden_module)
     typeclass.instances.insert index, instance
 
     instance
