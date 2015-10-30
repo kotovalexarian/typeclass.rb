@@ -1,7 +1,7 @@
 class Typeclass < Module
   class Instance
     ##
-    # Named type parameters for type class instance
+    # Named type parameters for type class instance.
     #
     class Params
       def initialize(raw_params)

@@ -3,7 +3,7 @@ require 'typeclass/instance/hidden_module'
 
 class Typeclass < Module
   ##
-  # Type class instance
+  # Type class instance.
   #
   class Instance
     attr_reader :params, :hidden_module
