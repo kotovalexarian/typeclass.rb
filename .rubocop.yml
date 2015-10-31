@@ -10,3 +10,6 @@ Style/RescueModifier:
 
 Style/AndOr:
   Enabled: false
+
+Style/AccessModifierIndentation:
+  EnforcedStyle: outdent

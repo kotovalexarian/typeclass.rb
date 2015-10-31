@@ -1,3 +1,4 @@
 class Typeclass < Module # rubocop:disable Style/Documentation
-  VERSION = '0.1.0'
+  # Gem version in format `MAJOR.MINOR.PATCH`
+  VERSION = '0.1.1'
 end
