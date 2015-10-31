@@ -6,6 +6,18 @@ require 'typeclass/instance'
 # Haskell type classes in Ruby.
 #
 class Typeclass < Module
+  # Create new typeclass.
+  #
+  # @example
+  #   Foo = Typeclass.new a: Object do
+  #   end
+  #
+  # @param constraints [Hash] Type parameter constraints.
+  # @yield Opens type class as module.
+  #
+  # @note
+  #   Exceptions raised by this method should stay unhandled.
+  #
   def initialize(constraints, &block)
     fail LocalJumpError, 'no block given' unless block_given?
 
@@ -17,6 +29,32 @@ class Typeclass < Module
     instance_exec(&block)
   end
 
+  # Create new instance of type class.
+  #
+  # @example
+  #   Formatter = Typeclass.new a: Object do
+  #     fn :format, [:a]
+  #   end
+  #
+  #   Formatter.instance a: Integer do
+  #     def format(a)
+  #       "exactly #{a}"
+  #     end
+  #   end
+  #
+  #   Formatter.instance a: Float do
+  #     def format(a)
+  #       "about #{a.round 2}"
+  #     end
+  #   end
+  #
+  # @param raw_params [Hash] Type parameters.
+  # @yield Opens module for function implementations.
+  # @return [Typeclass::Instance] New instance of type class.
+  #
+  # @note
+  #   Exceptions raised by this method should stay unhandled.
+  #
   def instance(raw_params, &block)
     fail LocalJumpError, 'no block given' unless block_given?
 
@@ -33,6 +71,33 @@ class Typeclass < Module
     instance
   end
 
+  # Create new instance of type class.
+  #
+  # @see #instance
+  #
+  # @param typeclass [Typeclass] Type class.
+  # @param raw_params [Hash] Type parameters.
+  # @yield Opens module for function implementations.
+  # @return [Typeclass::Instance] New instance of type class.
+  #
+  # @note
+  #   Exceptions raised by this method should stay unhandled.
+  #
+  def self.instance(typeclass, raw_params, &block)
+    fail TypeError unless typeclass.is_a? Typeclass
+
+    typeclass.instance raw_params, &block
+  end
+
+  # Get type class instance for function with signature `sig`
+  # when it was called with arguments `args`.
+  #
+  # @param sig [Array<Symbol>] Function signature.
+  # @param args [Array] Function arguments.
+  # @return [Typeclass::Instance, nil] Type class instance if match found.
+  #
+  # @api private
+  #
   def get_instance(sig, args)
     instances.each do |instance|
       return instance if instance.matched_by? sig, args
@@ -43,11 +108,44 @@ class Typeclass < Module
 
 private
 
+  # Available constraint types.
+  # @see type?
   TYPES = [Class, Module]
+
+  # Type used for no constraint.
+  # @see Typeclass::Instance::Params.check_raw_params!
   BASE_CLASS = Object
 
-  attr_reader :constraints, :instances
+  # @!attribute [r] constraints
+  # @return [Hash] Type parameter constraints.
+  attr_reader :constraints
 
+  # @!attribute [r] instances
+  # @return [Array<Typeclass::Instance>] Type class instances.
+  attr_reader :instances
+
+  # Declare function signature with optional default block.
+  #
+  # @example
+  #   Foo = Typeclass.new a: Enumerable do
+  #     fn :no_default, [:a]
+  #     fn :with_default, [:a] do |a|
+  #       a.first
+  #     end
+  #   end
+  #
+  #   Foo.instance a: Array do end
+  #
+  #   Foo.with_default ['a', 'b', 'c'] #=> "a"
+  #   Foo.no_defalt ['a', 'b', 'c']    # raises `NoMethodError`
+  #
+  # @param name [Symbol, String] Function name.
+  # @param sig [Array<Symbol>] Function signature.
+  # @yield Optional default block.
+  #
+  # @note
+  #   Exceptions raised by this method should stay unhandled.
+  #
   def fn(name, sig, &block)
     name = name.to_sym rescue (raise NameError)
     fail NameError if method_defined? name
@@ -60,6 +158,13 @@ private
     define_method name, &p
   end
 
+  # Get index for new instance in array of instances.
+  #
+  # @param params [Typeclass::Params] Type parameters.
+  # @return [Integer] Index for new instance in array of instances.
+  #
+  # @raise [TypeError] Collision with existing instance.
+  #
   def get_index!(params)
     (0..instances.count).each do |i|
       instance = instances[i]
@@ -69,16 +174,29 @@ private
     end
   end
 
-  def self.instance(typeclass, raw_params, &block)
-    fail TypeError unless typeclass.is_a? Typeclass
-
-    typeclass.instance raw_params, &block
-  end
-
+  # Check if object is type.
+  #
+  # @see TYPES
+  #
+  # @param object [Object] Any Ruby object.
+  # @return [Boolean] Is `object` a type.
+  #
+  # @api private
+  #
   def self.type?(object)
     TYPES.any? { |type| object.is_a? type }
   end
 
+  # Check is type parameter constraints have valid format.
+  # Raise exceptions if format is invalid.
+  #
+  # @param constraints [Hash] Type parameter constraints.
+  # @return [void]
+  #
+  # @raise [TypeError, ArgumentError]
+  #
+  # @api private
+  #
   def self.check_constraints!(constraints)
     fail TypeError unless constraints.is_a? Hash
     fail ArgumentError if constraints.empty?
