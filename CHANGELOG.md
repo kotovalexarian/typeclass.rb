@@ -1,5 +1,17 @@
 # Change Log
 
+## [v0.1.1](https://github.com/braiden-vasco/typeclass.rb/tree/v0.1.1) (2015-10-31)
+[Full Changelog](https://github.com/braiden-vasco/typeclass.rb/compare/v0.1.0...v0.1.1)
+
+**Merged pull requests:**
+
+- Add code documentation [\#9](https://github.com/braiden-vasco/typeclass.rb/pull/9) ([braiden-vasco](https://github.com/braiden-vasco))
+- Code refactoring [\#8](https://github.com/braiden-vasco/typeclass.rb/pull/8) ([braiden-vasco](https://github.com/braiden-vasco))
+- Remove check for circular paradox [\#7](https://github.com/braiden-vasco/typeclass.rb/pull/7) ([braiden-vasco](https://github.com/braiden-vasco))
+- Migrate tests to Minitest [\#6](https://github.com/braiden-vasco/typeclass.rb/pull/6) ([braiden-vasco](https://github.com/braiden-vasco))
+- Add more examples [\#5](https://github.com/braiden-vasco/typeclass.rb/pull/5) ([braiden-vasco](https://github.com/braiden-vasco))
+- Add examples [\#4](https://github.com/braiden-vasco/typeclass.rb/pull/4) ([braiden-vasco](https://github.com/braiden-vasco))
+
 ## [v0.1.0](https://github.com/braiden-vasco/typeclass.rb/tree/v0.1.0) (2015-10-27)
 **Merged pull requests:**
 
