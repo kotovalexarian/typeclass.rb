@@ -99,7 +99,7 @@ class TestTypeclassBlock < Minitest::Test
       fn :foo, []
     end
 
-    assert_kind_of Method, Foo.singleton_method(:foo)
     assert_kind_of Method, Foo.method(:foo)
+    assert_kind_of UnboundMethod, Foo.instance_method(:foo)
   end
 end
