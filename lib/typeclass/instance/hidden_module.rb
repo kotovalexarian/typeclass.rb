@@ -9,7 +9,7 @@ class Typeclass < Module
       def initialize(typeclass, &block)
         @module = Module.new
 
-        self.module.include typeclass
+        self.module.send :include, typeclass
         self.module.instance_exec(&block)
       end
     end
