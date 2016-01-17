@@ -21,11 +21,12 @@ class Typeclass < Module
   # @note
   #   Exceptions raised by this method should stay unhandled.
   #
-  def initialize(constraints, &block)
+  def initialize(*superclasses, constraints, &block)
     fail LocalJumpError, 'no block given' unless block_given?
 
     Typeclass.check_constraints! constraints
 
+    @superclasses = superclasses
     @constraints = constraints
     @instances = []
 
@@ -152,6 +153,10 @@ private
   # Type used for no constraint.
   # @see Typeclass::Instance::Params.check_raw_params!
   BASE_CLASS = Object
+
+  # @!attribute [r] superclasses
+  # @return [Array<Typeclass::Superclass>] Type class superclasses.
+  attr_reader :superclasses
 
   # @!attribute [r] constraints
   # @return [Hash] Type parameter constraints.
