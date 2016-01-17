@@ -76,7 +76,7 @@ class TestBehavior < Minitest::Test
     end
 
     Typeclass.instance Ord, a: Bool do
-      V = { false => 0, true => 1 }
+      V = { false => 0, true => 1 }.freeze
 
       def cmp(a1, a2)
         V[a1] <=> V[a2]
@@ -157,5 +157,23 @@ class TestBehavior < Minitest::Test
     end
 
     assert_equal :overloaded, B.foo
+  end
+
+  deftest :typeclass_is_visible_in_hidden_module do
+    Foo = Typeclass.new a: Numeric do
+      fn :foo, [:a]
+
+      fn :bar, [:a] do |a|
+        a * 2
+      end
+    end
+
+    Typeclass.instance Foo, a: Integer do
+      def foo(a)
+        bar(a + 1)
+      end
+    end
+
+    assert_equal 6, Foo.foo(2)
   end
 end

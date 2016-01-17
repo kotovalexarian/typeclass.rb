@@ -9,8 +9,11 @@ class Typeclass < Module
       def initialize(typeclass, &block)
         @module = Module.new
 
-        self.module.send :include, typeclass
         self.module.instance_exec(&block)
+
+        self.module.define_singleton_method :method_missing do |name, *args|
+          typeclass.send name, *args
+        end
       end
     end
   end
