@@ -66,9 +66,7 @@ class Typeclass < Module
 
     Instance::Params.check_raw_params! raw_params, constraints
 
-    fail NotImplementedError unless superclasses.all? do |superclass|
-      superclass.implemented? raw_params
-    end
+    check_superclasses_implemented! raw_params
 
     params = Instance::Params.new(raw_params)
     index = get_index! params
@@ -177,6 +175,12 @@ private
   # @!attribute [r] instances
   # @return [Array<Typeclass::Instance>] Type class instances.
   attr_reader :instances
+
+  def check_superclasses_implemented!(raw_params)
+    fail NotImplementedError unless superclasses.all? do |superclass|
+      superclass.implemented? raw_params
+    end
+  end
 
   # Declare function signature with optional default block.
   #
