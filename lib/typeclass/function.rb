@@ -17,13 +17,9 @@ class Typeclass < Module
 
       fail NotImplementedError unless instance
 
-      if instance.implements? name
-        instance.transmit name, *args
-      elsif block # rubocop:disable Style/GuardClause
-        block.call(*args)
-      else
-        fail NoMethodError
-      end
+      return instance.transmit name, *args if instance.implements? name
+      return block.call(*args) if block
+      fail NoMethodError
     end
 
     def to_proc
