@@ -158,4 +158,22 @@ class TestBehavior < Minitest::Test
 
     assert_equal :overloaded, B.foo
   end
+
+  deftest :typeclass_is_visible_in_hidden_module do
+    Foo = Typeclass.new a: Numeric do
+      fn :foo, [:a]
+
+      fn :bar, [:a] do |a|
+        a * 2
+      end
+    end
+
+    Typeclass.instance Foo, a: Integer do
+      def foo(a)
+        bar(a + 1)
+      end
+    end
+
+    assert_equal 6, Foo.foo(2)
+  end
 end
