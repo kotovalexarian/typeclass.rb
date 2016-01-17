@@ -13,11 +13,11 @@ class Typeclass < Module
     def implemented?(raw_params) # rubocop:disable Metrics/AbcSize
       params = args.map { |arg| raw_params[arg] }
 
-      a = typeclass.send(:constraints).map do |k, _|
+      a = typeclass.constraints.map do |k, _|
         { k => params.shift }
       end.inject(&:merge)
 
-      typeclass.send(:instances).any? do |instance|
+      typeclass.instances.any? do |instance|
         a.all? { |k, v| v.ancestors.include? instance.params[k] }
       end
     end

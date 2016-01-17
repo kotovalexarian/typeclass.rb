@@ -9,6 +9,14 @@ require 'typeclass/superclass'
 class Typeclass < Module
   include Superclass::TypeclassMixin
 
+  # @!attribute [r] constraints
+  # @return [Hash] Type parameter constraints.
+  attr_reader :constraints
+
+  # @!attribute [r] instances
+  # @return [Array<Typeclass::Instance>] Type class instances.
+  attr_reader :instances
+
   # Create new typeclass.
   #
   # @example
@@ -167,14 +175,6 @@ private
   # @!attribute [r] superclasses
   # @return [Array<Typeclass::Superclass>] Type class superclasses.
   attr_reader :superclasses
-
-  # @!attribute [r] constraints
-  # @return [Hash] Type parameter constraints.
-  attr_reader :constraints
-
-  # @!attribute [r] instances
-  # @return [Array<Typeclass::Instance>] Type class instances.
-  attr_reader :instances
 
   def check_superclasses_implemented!(raw_params)
     fail NotImplementedError unless superclasses.all? do |superclass|
