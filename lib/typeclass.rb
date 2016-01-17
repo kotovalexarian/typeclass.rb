@@ -1,11 +1,26 @@
 require 'typeclass/version'
 require 'typeclass/function'
 require 'typeclass/instance'
+require 'typeclass/superclass'
 
 ##
 # Haskell type classes in Ruby.
 #
 class Typeclass < Module
+  include Superclass::TypeclassMixin
+
+  # @!attribute [r] superclasses
+  # @return [Array<Typeclass::Superclass>] Type class superclasses.
+  attr_reader :superclasses
+
+  # @!attribute [r] constraints
+  # @return [Hash] Type parameter constraints.
+  attr_reader :constraints
+
+  # @!attribute [r] instances
+  # @return [Array<Typeclass::Instance>] Type class instances.
+  attr_reader :instances
+
   # Create new typeclass.
   #
   # @example
@@ -18,13 +33,18 @@ class Typeclass < Module
   # @note
   #   Exceptions raised by this method should stay unhandled.
   #
-  def initialize(constraints, &block)
+  def initialize(*superclasses, constraints, &block)
     fail LocalJumpError, 'no block given' unless block_given?
 
+    Superclass.check! superclasses
     Typeclass.check_constraints! constraints
+    Typeclass.check_superclass_args! constraints, superclasses
 
+    @superclasses = superclasses
     @constraints = constraints
     @instances = []
+
+    superclasses.map(&:typeclass).each(&method(:inherit))
 
     instance_exec(&block)
   end
@@ -59,6 +79,8 @@ class Typeclass < Module
     fail LocalJumpError, 'no block given' unless block_given?
 
     Instance::Params.check_raw_params! raw_params, constraints
+
+    check_superclasses_implemented! raw_params
 
     params = Instance::Params.new(raw_params)
     index = get_index! params
@@ -140,6 +162,12 @@ class Typeclass < Module
     end
   end
 
+  def self.check_superclass_args!(constraints, superclasses)
+    fail ArgumentError unless superclasses.all? do |superclass|
+      superclass.args.all? { |arg| constraints.key? arg }
+    end
+  end
+
 private
 
   # Available constraint types.
@@ -150,13 +178,24 @@ private
   # @see Typeclass::Instance::Params.check_raw_params!
   BASE_CLASS = Object
 
-  # @!attribute [r] constraints
-  # @return [Hash] Type parameter constraints.
-  attr_reader :constraints
+  def check_superclasses_implemented!(raw_params)
+    fail NotImplementedError unless superclasses.all? do |superclass|
+      superclass.implemented? raw_params
+    end
+  end
 
-  # @!attribute [r] instances
-  # @return [Array<Typeclass::Instance>] Type class instances.
-  attr_reader :instances
+  def inherit(typeclass)
+    typeclass.singleton_methods.each do |method_name|
+      p = typeclass.method method_name
+
+      define_singleton_method method_name, &p
+      define_method method_name, &p
+    end
+
+    typeclass.superclasses.each do |superclass|
+      inherit superclass.typeclass
+    end
+  end
 
   # Declare function signature with optional default block.
   #

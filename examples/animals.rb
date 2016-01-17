@@ -41,5 +41,5 @@ include Animal
 dog = Dog['Spike']
 sheep = Sheep['Dolly']
 
-puts talk(dog) # Spike says "woof woof!"
-puts talk(sheep) # Dolly says "baaah"
+fail unless talk(dog) == 'Spike says "woof woof!"'
+fail unless talk(sheep) == 'Dolly says "baaah"'
