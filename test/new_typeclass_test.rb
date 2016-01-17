@@ -39,6 +39,17 @@ class TestNewTypeclass < Minitest::Test
     Typeclass.new a: Integer, b: String do end
   end
 
+  deftest :typeclass_checks_if_arguments_are_superclasses do
+    Car = Typeclass.new a: Integer do end
+
+    assert_raises(TypeError) { Typeclass.new nil, a: Object do end }
+    assert_raises(TypeError) { Typeclass.new 1, a: Object do end }
+    assert_raises(TypeError) { Typeclass.new :a, a: Object do end }
+    assert_raises(TypeError) { Typeclass.new 'a', a: Object do end }
+    assert_raises(TypeError) { Typeclass.new [Car[:a]], a: Object do end }
+    assert_raises(TypeError) { Typeclass.new({ a: Object }, a: Object) do end }
+  end
+
   deftest :typeclass_with_superclass_is_created_successful do
     Foo = Typeclass.new a: Integer do end
     Bar = Typeclass.new a: String do end

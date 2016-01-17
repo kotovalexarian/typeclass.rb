@@ -21,5 +21,11 @@ class Typeclass < Module
         Superclass.new self, args
       end
     end
+
+    def self.check!(superclasses)
+      fail TypeError unless superclasses.all? do |superclass|
+        superclass.is_a? Superclass
+      end
+    end
   end
 end

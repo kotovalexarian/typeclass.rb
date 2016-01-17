@@ -24,6 +24,7 @@ class Typeclass < Module
   def initialize(*superclasses, constraints, &block)
     fail LocalJumpError, 'no block given' unless block_given?
 
+    Superclass.check! superclasses
     Typeclass.check_constraints! constraints
 
     @superclasses = superclasses
