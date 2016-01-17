@@ -9,5 +9,17 @@ class Typeclass < Module
       @typeclass = typeclass
       @args = args
     end
+
+    ##
+    # Typeclass extension for superclasses.
+    #
+    module TypeclassMixin
+      def [](*args)
+        fail TypeError unless args.all? { |arg| arg.is_a? Symbol }
+        fail ArgumentError unless args.count == constraints.count
+
+        Superclass.new self, args
+      end
+    end
   end
 end

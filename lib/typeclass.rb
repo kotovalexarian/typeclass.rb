@@ -7,6 +7,8 @@ require 'typeclass/superclass'
 # Haskell type classes in Ruby.
 #
 class Typeclass < Module
+  include Superclass::TypeclassMixin
+
   # Create new typeclass.
   #
   # @example
@@ -28,13 +30,6 @@ class Typeclass < Module
     @instances = []
 
     instance_exec(&block)
-  end
-
-  def [](*args)
-    fail TypeError unless args.all? { |arg| arg.is_a? Symbol }
-    fail ArgumentError unless args.count == constraints.count
-
-    Superclass.new self, args
   end
 
   # Create new instance of type class.
