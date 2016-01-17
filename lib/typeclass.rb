@@ -66,6 +66,10 @@ class Typeclass < Module
 
     Instance::Params.check_raw_params! raw_params, constraints
 
+    fail NotImplementedError unless superclasses.all? do |superclass|
+      superclass.implemented? raw_params
+    end
+
     params = Instance::Params.new(raw_params)
     index = get_index! params
 

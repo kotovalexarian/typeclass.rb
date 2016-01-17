@@ -75,4 +75,22 @@ class TestInstance < Minitest::Test
     Typeclass.instance Bar, a: Integer, b: Hash, c: Integer do end
     Typeclass.instance Bar, a: Integer, b: Array, c: Integer do end
   end
+
+  deftest :instantiation_checks_if_superclasses_are_implemented do
+    ImplementedSuperclass = Typeclass.new a: Object do end
+    NotImplementedSuperclass = Typeclass.new a: Object do end
+
+    Typeclass.instance ImplementedSuperclass, a: Integer do end
+    Typeclass.instance NotImplementedSuperclass, a: String do end
+
+    SomeTypeclass = Typeclass.new(
+      ImplementedSuperclass[:a],
+      NotImplementedSuperclass[:a],
+      a: Object
+    ) do end
+
+    assert_raises(NotImplementedError) do
+      Typeclass.instance SomeTypeclass, a: Integer do end
+    end
+  end
 end
