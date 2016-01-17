@@ -109,11 +109,45 @@ class Typeclass < Module
     nil
   end
 
+  # Check if object is type.
+  #
+  # @see TYPES
+  #
+  # @param object [Object] Any Ruby object.
+  # @return [Boolean] Is `object` a type.
+  #
+  # @api private
+  #
+  def self.type?(object)
+    TYPES.any? { |type| object.is_a? type }
+  end
+
+  # Check is type parameter constraints have valid format.
+  # Raise exceptions if format is invalid.
+  #
+  # @param constraints [Hash] Type parameter constraints.
+  # @return [void]
+  #
+  # @raise [TypeError, ArgumentError]
+  #
+  # @api private
+  #
+  def self.check_constraints!(constraints)
+    fail TypeError unless constraints.is_a? Hash
+    fail ArgumentError if constraints.empty?
+
+    constraints.each do |name, type|
+      name.is_a? Symbol or
+        fail TypeError, 'parameter name is not a Symbol'
+      fail TypeError unless Typeclass.type? type
+    end
+  end
+
 private
 
   # Available constraint types.
   # @see type?
-  TYPES = [Class, Module]
+  TYPES = [Class, Module].freeze
 
   # Type used for no constraint.
   # @see Typeclass::Instance::Params.check_raw_params!
@@ -174,40 +208,6 @@ private
       return i if instance.nil?
       fail TypeError if instance.params.collision? params
       return i if instance.params > params
-    end
-  end
-
-  # Check if object is type.
-  #
-  # @see TYPES
-  #
-  # @param object [Object] Any Ruby object.
-  # @return [Boolean] Is `object` a type.
-  #
-  # @api private
-  #
-  def self.type?(object)
-    TYPES.any? { |type| object.is_a? type }
-  end
-
-  # Check is type parameter constraints have valid format.
-  # Raise exceptions if format is invalid.
-  #
-  # @param constraints [Hash] Type parameter constraints.
-  # @return [void]
-  #
-  # @raise [TypeError, ArgumentError]
-  #
-  # @api private
-  #
-  def self.check_constraints!(constraints)
-    fail TypeError unless constraints.is_a? Hash
-    fail ArgumentError if constraints.empty?
-
-    constraints.each do |name, type|
-      name.is_a? Symbol or
-        fail TypeError, 'parameter name is not a Symbol'
-      fail TypeError unless Typeclass.type? type
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rubygems'
 
 gemspec = Gem::Specification.load('typeclass.gemspec')
@@ -36,10 +38,10 @@ end
 
 desc 'Render examples to README'
 task :examples do
-  EXAMPLES_DIR = 'examples'
-  README = 'README.md'
-  SUBTITLE = 'Examples'
-  EXPR = "#{SUBTITLE}\n#{'-' * SUBTITLE.length}\n"
+  EXAMPLES_DIR = 'examples'.freeze
+  README = 'README.md'.freeze
+  SUBTITLE = 'Examples'.freeze
+  EXPR = "#{SUBTITLE}\n#{'-' * SUBTITLE.length}\n".freeze
   REGEXP = /#{EXPR}/
 
   examples = Dir["#{EXAMPLES_DIR}/*"].each_with_index.map do |filename, index|

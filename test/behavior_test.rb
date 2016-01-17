@@ -76,7 +76,7 @@ class TestBehavior < Minitest::Test
     end
 
     Typeclass.instance Ord, a: Bool do
-      V = { false => 0, true => 1 }
+      V = { false => 0, true => 1 }.freeze
 
       def cmp(a1, a2)
         V[a1] <=> V[a2]

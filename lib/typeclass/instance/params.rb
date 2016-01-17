@@ -4,6 +4,8 @@ class Typeclass < Module
     # Named type parameters for type class instance.
     #
     class Params
+      attr_reader :data
+
       def initialize(raw_params)
         @data = raw_params
       end
@@ -22,10 +24,6 @@ class Typeclass < Module
       def [](name)
         data[name]
       end
-
-    private
-
-      attr_reader :data
 
       def self.check_raw_params!(raw_params, # rubocop:disable Metrics/AbcSize
                                  constraints)
