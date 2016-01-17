@@ -26,6 +26,7 @@ class Typeclass < Module
 
     Superclass.check! superclasses
     Typeclass.check_constraints! constraints
+    Typeclass.check_superclass_args! constraints, superclasses
 
     @superclasses = superclasses
     @constraints = constraints
@@ -142,6 +143,12 @@ class Typeclass < Module
       name.is_a? Symbol or
         fail TypeError, 'parameter name is not a Symbol'
       fail TypeError unless Typeclass.type? type
+    end
+  end
+
+  def self.check_superclass_args!(constraints, superclasses)
+    fail ArgumentError unless superclasses.all? do |superclass|
+      superclass.args.all? { |arg| constraints.key? arg }
     end
   end
 

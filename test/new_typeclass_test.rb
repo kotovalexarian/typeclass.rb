@@ -50,6 +50,12 @@ class TestNewTypeclass < Minitest::Test
     assert_raises(TypeError) { Typeclass.new({ a: Object }, a: Object) do end }
   end
 
+  deftest :typeclass_checks_superclass_arguments do
+    Cdr = Typeclass.new a: Object do end
+
+    assert_raises(ArgumentError) { Typeclass.new Cdr[:a], b: Object do end }
+  end
+
   deftest :typeclass_with_superclass_is_created_successful do
     Foo = Typeclass.new a: Integer do end
     Bar = Typeclass.new a: String do end
