@@ -30,7 +30,6 @@ class Typeclass < Module
   end
 
   def [](*args)
-    fail ArgumentError if args.empty?
     fail TypeError unless args.all? { |arg| arg.is_a? Symbol }
     fail ArgumentError unless args.count == constraints.count
   end
