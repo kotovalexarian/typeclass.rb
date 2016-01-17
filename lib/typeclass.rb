@@ -40,6 +40,8 @@ class Typeclass < Module
     @constraints = constraints
     @instances = []
 
+    superclasses.map(&:typeclass).each(&method(:inherit))
+
     instance_exec(&block)
   end
 
@@ -179,6 +181,15 @@ private
   def check_superclasses_implemented!(raw_params)
     fail NotImplementedError unless superclasses.all? do |superclass|
       superclass.implemented? raw_params
+    end
+  end
+
+  def inherit(typeclass)
+    typeclass.instance_methods.each do |method_name|
+      p = typeclass.instance_method(method_name).bind self
+
+      define_singleton_method method_name, &p
+      define_method method_name, &p
     end
   end
 
