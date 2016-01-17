@@ -19,7 +19,7 @@ class Typeclass < Module
 
       if instance.implements? name
         instance.transmit name, *args
-      elsif block
+      elsif block # rubocop:disable Style/GuardClause
         block.call(*args)
       else
         fail NoMethodError
