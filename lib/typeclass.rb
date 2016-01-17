@@ -185,8 +185,8 @@ private
   end
 
   def inherit(typeclass)
-    typeclass.instance_methods.each do |method_name|
-      p = typeclass.instance_method(method_name).bind self
+    typeclass.singleton_methods.each do |method_name|
+      p = typeclass.method method_name
 
       define_singleton_method method_name, &p
       define_method method_name, &p
