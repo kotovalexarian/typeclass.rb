@@ -31,6 +31,7 @@ class Typeclass < Module
 
   def [](*args)
     fail ArgumentError if args.empty?
+    fail TypeError unless args.all? { |arg| arg.is_a? Symbol }
   end
 
   # Create new instance of type class.
