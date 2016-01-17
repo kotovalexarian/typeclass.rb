@@ -26,3 +26,46 @@ will be replaced with the optimized code generated directly from the source.
 If the optimized bytecode can not be generated due to some reasons
 (no back end for the virtual machine, for example), the code can be
 interpreted in the usual way because it is still a normal Ruby code.
+
+Example
+-------
+
+Please read [this article](https://www.haskell.org/tutorial/classes.html)
+if you are unfamiliar with Haskell type classes (understanding of Rust
+traits should be enough).
+
+Let's look at the following example and realize which parts of the code
+can be statically typed.
+
+```ruby
+Show = Typeclass.new a: Object do
+  fn :show, [:a]
+end
+
+Typeclass.instance Show, a: Integer do
+  def show(a)
+    "Integer(#{a})"
+  end
+end
+
+Typeclass.instance Show, a: String do
+  def show(a)
+    "String(#{a.dump})"
+  end
+end
+
+puts Show.show(5) #=> Integer(5)
+puts Show.show('Qwerty') #=> String("Qwerty")
+```
+
+As you can see, that there is no annoying
+[typesig's](https://rubygems.org/gems/rubype),
+[typecheck's](https://rubygems.org/gems/typecheck),
+[sig's](https://rubygems.org/gems/sig),
+and again [typesig's](https://github.com/plum-umd/rtc).
+Definitions of type classes and instances, and function signatures
+looks like typical Haskell code. The functions, in turn, are just
+Ruby methods.
+
+Nevertheless, the types of the arguments are known and can be checked
+in `Typeclass#instance` method after it's block is executed.
