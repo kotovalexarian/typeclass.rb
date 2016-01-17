@@ -8,6 +8,25 @@ Typeclass
 
 Haskell type classes in Ruby.
 
+Usage
+-----
+
+**The gem is under development. Don't try to use it in production code.**
+
+To install type in terminal
+
+```sh
+gem install typeclass
+```
+
+or add to your `Gemfile`
+
+```ruby
+gem 'typeclass', '~> 0.1.1'
+```
+
+To learn how to use the gem look at the [examples](/examples/).
+
 Concept
 -------
 
