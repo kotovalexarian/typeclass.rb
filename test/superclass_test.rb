@@ -7,7 +7,7 @@ class TestSuperclass < Minitest::Test
   FooBar = Typeclass.new a: Object, b: Object do
   end
 
-  def test_constructor
+  def test_constructor # rubocop:disable Metrics/AbcSize
     assert_raises(ArgumentError) { Foo[] }
 
     assert_raises(TypeError) { Foo[nil] }
@@ -15,5 +15,8 @@ class TestSuperclass < Minitest::Test
     assert_raises(TypeError) { Foo['a'] }
     assert_raises(TypeError) { Foo[[:a, :b]] }
     assert_raises(TypeError) { Foo[{ a: 1, b: 2 }] }
+
+    assert_raises(ArgumentError) { Foo[:a, :b] }
+    assert_raises(ArgumentError) { FooBar[:a] }
   end
 end
