@@ -192,6 +192,8 @@ class TestBehavior < Minitest::Test
       fn :cdr, [:a] do |a|
         bar(a + 1)
       end
+
+      fn :cdr2, [:a]
     end
 
     Typeclass.instance Bar, a: Integer do
@@ -201,8 +203,12 @@ class TestBehavior < Minitest::Test
     end
 
     Typeclass.instance Cdr, a: Integer do
+      def cdr2(a)
+        bar(a + 2)
+      end
     end
 
     assert_equal 6, Cdr.cdr(2)
+    assert_equal 8, Cdr.cdr2(2)
   end
 end
