@@ -29,6 +29,10 @@ class Typeclass < Module
     instance_exec(&block)
   end
 
+  def [](*args)
+    fail ArgumentError if args.empty?
+  end
+
   # Create new instance of type class.
   #
   # @example
