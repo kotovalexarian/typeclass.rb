@@ -1,6 +1,7 @@
 require 'typeclass/version'
 require 'typeclass/function'
 require 'typeclass/instance'
+require 'typeclass/superclass'
 
 ##
 # Haskell type classes in Ruby.
@@ -32,6 +33,8 @@ class Typeclass < Module
   def [](*args)
     fail TypeError unless args.all? { |arg| arg.is_a? Symbol }
     fail ArgumentError unless args.count == constraints.count
+
+    Superclass.new self, args
   end
 
   # Create new instance of type class.
