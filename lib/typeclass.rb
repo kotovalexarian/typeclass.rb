@@ -9,6 +9,10 @@ require 'typeclass/superclass'
 class Typeclass < Module
   include Superclass::TypeclassMixin
 
+  # @!attribute [r] superclasses
+  # @return [Array<Typeclass::Superclass>] Type class superclasses.
+  attr_reader :superclasses
+
   # @!attribute [r] constraints
   # @return [Hash] Type parameter constraints.
   attr_reader :constraints
@@ -174,10 +178,6 @@ private
   # @see Typeclass::Instance::Params.check_raw_params!
   BASE_CLASS = Object
 
-  # @!attribute [r] superclasses
-  # @return [Array<Typeclass::Superclass>] Type class superclasses.
-  attr_reader :superclasses
-
   def check_superclasses_implemented!(raw_params)
     fail NotImplementedError unless superclasses.all? do |superclass|
       superclass.implemented? raw_params
@@ -190,6 +190,10 @@ private
 
       define_singleton_method method_name, &p
       define_method method_name, &p
+    end
+
+    typeclass.superclasses.each do |superclass|
+      inherit superclass.typeclass
     end
   end
 

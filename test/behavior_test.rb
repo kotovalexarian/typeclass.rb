@@ -176,4 +176,33 @@ class TestBehavior < Minitest::Test
 
     assert_equal 6, Foo.foo(2)
   end
+
+  deftest :deep_inheritance do
+    Bar = Typeclass.new a: Numeric do
+      fn :bar, [:a] do |a|
+        a * 2
+      end
+    end
+
+    Car = Typeclass.new Bar[:a], a: Object do
+      fn :car, [:a]
+    end
+
+    Cdr = Typeclass.new Car[:a], a: Numeric do
+      fn :cdr, [:a] do |a|
+        bar(a + 1)
+      end
+    end
+
+    Typeclass.instance Bar, a: Integer do
+    end
+
+    Typeclass.instance Car, a: Integer do
+    end
+
+    Typeclass.instance Cdr, a: Integer do
+    end
+
+    assert_equal 6, Cdr.cdr(2)
+  end
 end
