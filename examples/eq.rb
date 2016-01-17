@@ -42,5 +42,5 @@ a = Cmplx[3.5, 2.7]
 b = Cmplx.scan '3.5 + 2.7i'
 c = Cmplx.scan '1.9 + 4.6i'
 
-puts "#{b} == #{a}" if equal(b, a) # 3.5 + 2.7i == 3.5 + 2.7i
-puts "#{c} != #{a}" if noteq(c, a) # 1.9 + 4.6i != 3.5 + 2.7i
+fail unless equal(b, a)
+fail unless noteq(c, a)
