@@ -1,5 +1,19 @@
 # Change Log
 
+## [v0.2.0](https://github.com/braiden-vasco/typeclass.rb/tree/v0.2.0) (2016-01-18)
+[Full Changelog](https://github.com/braiden-vasco/typeclass.rb/compare/v0.1.1...v0.2.0)
+
+**Fixed bugs:**
+
+- Fix error with hidden module [\#12](https://github.com/braiden-vasco/typeclass.rb/pull/12) ([braiden-vasco](https://github.com/braiden-vasco))
+
+**Merged pull requests:**
+
+- Prepare for release [\#14](https://github.com/braiden-vasco/typeclass.rb/pull/14) ([braiden-vasco](https://github.com/braiden-vasco))
+- Implement inheritance [\#13](https://github.com/braiden-vasco/typeclass.rb/pull/13) ([braiden-vasco](https://github.com/braiden-vasco))
+- Support more rubies [\#11](https://github.com/braiden-vasco/typeclass.rb/pull/11) ([braiden-vasco](https://github.com/braiden-vasco))
+- Add link to documentation with shield to README [\#10](https://github.com/braiden-vasco/typeclass.rb/pull/10) ([braiden-vasco](https://github.com/braiden-vasco))
+
 ## [v0.1.1](https://github.com/braiden-vasco/typeclass.rb/tree/v0.1.1) (2015-10-31)
 [Full Changelog](https://github.com/braiden-vasco/typeclass.rb/compare/v0.1.0...v0.1.1)
 
