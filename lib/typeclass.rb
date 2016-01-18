@@ -141,7 +141,7 @@ class Typeclass < Module
     TYPES.any? { |type| object.is_a? type }
   end
 
-  # Check is type parameter constraints have valid format.
+  # Check if type parameter constraints have valid format.
   # Raise exceptions if format is invalid.
   #
   # @param constraints [Hash] Type parameter constraints.
@@ -162,6 +162,17 @@ class Typeclass < Module
     end
   end
 
+  # Check if superclass constraints uses only constraint type valiables.
+  # Raise exceptions if undefined type variables is used.
+  #
+  # @param constraints [Hash] Type parameter constraints.
+  # @param superclasses [Array<Typeclass::Superclass>] Array of superclasses.
+  # @return [void]
+  #
+  # @raise [ArgumentError]
+  #
+  # @api private
+  #
   def self.check_superclass_args!(constraints, superclasses)
     fail ArgumentError unless superclasses.all? do |superclass|
       superclass.args.all? { |arg| constraints.key? arg }
@@ -178,12 +189,29 @@ private
   # @see Typeclass::Instance::Params.check_raw_params!
   BASE_CLASS = Object
 
+  # Check if superclasses are implemented for typeclass instance's params.
+  # Raise exceptions if not implemented.
+  #
+  # @param raw_params [Hash] Type parameters.
+  # @return [void]
+  #
+  # @raise [NotImplementedError]
+  #
+  # @api private
+  #
   def check_superclasses_implemented!(raw_params)
     fail NotImplementedError unless superclasses.all? do |superclass|
       superclass.implemented? raw_params
     end
   end
 
+  # Recursively include superclass' methods in the typeclass.
+  #
+  # @param typeclass [Typeclass] Which typeclass to include.
+  # @return [void]
+  #
+  # @api private
+  #
   def inherit(typeclass)
     typeclass.singleton_methods.each do |method_name|
       p = typeclass.method method_name
