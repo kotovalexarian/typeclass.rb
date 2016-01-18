@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'rubygems'
 
 gemspec = Gem::Specification.load('typeclass.gemspec')
@@ -34,29 +32,4 @@ require 'github_changelog_generator/task'
 GitHubChangelogGenerator::RakeTask.new do |config|
   config.user = github_user
   config.project = github_project
-end
-
-desc 'Render examples to README'
-task :examples do
-  EXAMPLES_DIR = 'examples'.freeze
-  README = 'README.md'.freeze
-  SUBTITLE = 'Examples'.freeze
-  EXPR = "#{SUBTITLE}\n#{'-' * SUBTITLE.length}\n".freeze
-  REGEXP = /#{EXPR}/
-
-  examples = Dir["#{EXAMPLES_DIR}/*"].each_with_index.map do |filename, index|
-    example = File.read filename
-
-    <<-END
-#{"-----\n\n" unless index.zero?}File [#{filename}](#{filename}):
-
-```ruby
-#{example}```
-END
-  end.join("\n")
-
-  input = File.read README
-  pos = input =~ REGEXP
-  output = "#{input[0...pos]}#{EXPR}\n#{examples}"
-  File.write README, output
 end
