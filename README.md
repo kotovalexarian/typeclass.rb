@@ -8,6 +8,18 @@ Typeclass
 
 Haskell type classes in Ruby.
 
+Summary
+-------
+
+Current state:
+
+* Syntactic identity with Haskell type classes
+
+Goals:
+
+* Static type checking
+* Strong optimization
+
 Usage
 -----
 
