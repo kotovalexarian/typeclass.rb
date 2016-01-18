@@ -9,10 +9,6 @@ require 'typeclass/superclass'
 class Typeclass < Module
   include Superclass::TypeclassMixin
 
-  # @!attribute [r] superclasses
-  # @return [Array<Typeclass::Superclass>] Type class superclasses.
-  attr_reader :superclasses
-
   # @!attribute [r] constraints
   # @return [Hash] Type parameter constraints.
   attr_reader :constraints
@@ -38,13 +34,13 @@ class Typeclass < Module
 
     Superclass.check! superclasses
     Typeclass.check_constraints! constraints
-    Typeclass.check_superclass_args! constraints, superclasses
+    Superclass.check_superclass_args! constraints, superclasses
 
     @superclasses = superclasses
     @constraints = constraints
     @instances = []
 
-    superclasses.map(&:typeclass).each(&method(:inherit))
+    superclasses.each(&method(:inherit))
 
     instance_exec(&block)
   end
@@ -162,23 +158,6 @@ class Typeclass < Module
     end
   end
 
-  # Check if superclass constraints uses only constraint type valiables.
-  # Raise exceptions if undefined type variables is used.
-  #
-  # @param constraints [Hash] Type parameter constraints.
-  # @param superclasses [Array<Typeclass::Superclass>] Array of superclasses.
-  # @return [void]
-  #
-  # @raise [ArgumentError]
-  #
-  # @api private
-  #
-  def self.check_superclass_args!(constraints, superclasses)
-    fail ArgumentError unless superclasses.all? do |superclass|
-      superclass.args.all? { |arg| constraints.key? arg }
-    end
-  end
-
 private
 
   # Available constraint types.
@@ -188,42 +167,6 @@ private
   # Type used for no constraint.
   # @see Typeclass::Instance::Params.check_raw_params!
   BASE_CLASS = Object
-
-  # Check if superclasses are implemented for typeclass instance's params.
-  # Raise exceptions if not implemented.
-  #
-  # @param raw_params [Hash] Type parameters.
-  # @return [void]
-  #
-  # @raise [NotImplementedError]
-  #
-  # @api private
-  #
-  def check_superclasses_implemented!(raw_params)
-    fail NotImplementedError unless superclasses.all? do |superclass|
-      superclass.implemented? raw_params
-    end
-  end
-
-  # Recursively include superclass' methods in the typeclass.
-  #
-  # @param typeclass [Typeclass] Which typeclass to include.
-  # @return [void]
-  #
-  # @api private
-  #
-  def inherit(typeclass)
-    typeclass.singleton_methods.each do |method_name|
-      p = typeclass.method method_name
-
-      define_singleton_method method_name, &p
-      define_method method_name, &p
-    end
-
-    typeclass.superclasses.each do |superclass|
-      inherit superclass.typeclass
-    end
-  end
 
   # Declare function signature with optional default block.
   #
