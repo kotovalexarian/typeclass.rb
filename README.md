@@ -123,7 +123,7 @@ Typeclass.instance Foo, a: Bar, b: Integer do
 end
 ```
 
-In this case we can not know how method Bar#bar uses it's arguments,
+In this case we can not know how method `Bar#bar` uses it's arguments,
 so we can only call the method without any checks and optimizations.
 
 #### Dynamically typed code calls statically typed code
