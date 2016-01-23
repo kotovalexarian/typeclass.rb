@@ -64,10 +64,13 @@ class Typeclass < Module
       # @param superclass [Typeclass::Superclass] Which sperclass inherit from.
       # @return [void]
       #
+      # @raise [TypeError]
+      #
       def include(superclass)
+        fail TypeError unless superclass.is_a? Superclass
+
         superclasses << superclass
 
-        Superclass.check! superclasses
         Superclass.check_superclass_args! constraints, superclasses
 
         inherit superclass
@@ -107,21 +110,6 @@ class Typeclass < Module
         fail NotImplementedError unless superclasses.all? do |superclass|
           superclass.implemented? raw_params
         end
-      end
-    end
-
-    # Check if array items are superclasses.
-    # Raise exception if not.
-    #
-    # @param superclasses [Array<Typeclass::Superclass>] Items to check.
-    #
-    # @raise [TypeError]
-    #
-    # @api private
-    #
-    def self.check!(superclasses)
-      fail TypeError unless superclasses.all? do |superclass|
-        superclass.is_a? Superclass
       end
     end
 
