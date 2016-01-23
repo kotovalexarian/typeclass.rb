@@ -184,11 +184,15 @@ class TestBehavior < Minitest::Test
       end
     end
 
-    Car = Typeclass.new Bar[:a], a: Object do
+    Car = Typeclass.new a: Object do
+      include Bar[:a]
+
       fn :car, [:a]
     end
 
-    Cdr = Typeclass.new Car[:a], a: Numeric do
+    Cdr = Typeclass.new a: Numeric do
+      include Car[:a]
+
       fn :cdr, [:a] do |a|
         bar(a + 1)
       end
