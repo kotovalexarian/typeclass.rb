@@ -14,6 +14,7 @@ Summary
 Current state:
 
 * Syntactic identity with Haskell type classes
+* More typical for Ruby syntax
 
 Goals:
 
