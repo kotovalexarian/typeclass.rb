@@ -29,18 +29,14 @@ class Typeclass < Module
   # @note
   #   Exceptions raised by this method should stay unhandled.
   #
-  def initialize(*superclasses, constraints, &block)
+  def initialize(constraints, &block)
     fail LocalJumpError, 'no block given' unless block_given?
 
-    Superclass.check! superclasses
     Typeclass.check_constraints! constraints
-    Superclass.check_superclass_args! constraints, superclasses
 
-    @superclasses = superclasses
+    @superclasses = []
     @constraints = constraints
     @instances = []
-
-    superclasses.each(&method(:inherit))
 
     instance_exec(&block)
   end

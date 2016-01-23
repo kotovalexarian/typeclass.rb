@@ -59,6 +59,20 @@ class Typeclass < Module
         Superclass.new self, args
       end
 
+      # Inherit from superclass
+      #
+      # @param superclass [Typeclass::Superclass] Which sperclass inherit from.
+      # @return [void]
+      #
+      def include(superclass)
+        superclasses << superclass
+
+        Superclass.check! superclasses
+        Superclass.check_superclass_args! constraints, superclasses
+
+        inherit superclass
+      end
+
       # Recursively include superclass' methods in the typeclass.
       #
       # @param superclass [Typeclass::Superclass] Which typeclass to include.
