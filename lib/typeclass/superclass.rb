@@ -59,6 +59,24 @@ class Typeclass < Module
         Superclass.new self, args
       end
 
+      # Inherit from superclass
+      #
+      # @param superclass [Typeclass::Superclass] Which sperclass inherit from.
+      # @return [void]
+      #
+      # @raise [TypeError, ArgumentError]
+      #
+      def include(superclass)
+        fail TypeError unless superclass.is_a? Superclass
+        fail ArgumentError unless superclass.args.all? do |arg|
+          constraints.key? arg
+        end
+
+        superclasses << superclass
+
+        inherit superclass
+      end
+
       # Recursively include superclass' methods in the typeclass.
       #
       # @param superclass [Typeclass::Superclass] Which typeclass to include.
@@ -93,38 +111,6 @@ class Typeclass < Module
         fail NotImplementedError unless superclasses.all? do |superclass|
           superclass.implemented? raw_params
         end
-      end
-    end
-
-    # Check if array items are superclasses.
-    # Raise exception if not.
-    #
-    # @param superclasses [Array<Typeclass::Superclass>] Items to check.
-    #
-    # @raise [TypeError]
-    #
-    # @api private
-    #
-    def self.check!(superclasses)
-      fail TypeError unless superclasses.all? do |superclass|
-        superclass.is_a? Superclass
-      end
-    end
-
-    # Check if superclass constraints uses only constraint type valiables.
-    # Raise exceptions if undefined type variables is used.
-    #
-    # @param constraints [Hash] Type parameter constraints.
-    # @param superclasses [Array<Typeclass::Superclass>] Array of superclasses.
-    # @return [void]
-    #
-    # @raise [ArgumentError]
-    #
-    # @api private
-    #
-    def self.check_superclass_args!(constraints, superclasses)
-      fail ArgumentError unless superclasses.all? do |superclass|
-        superclass.args.all? { |arg| constraints.key? arg }
       end
     end
   end

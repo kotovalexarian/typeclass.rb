@@ -4,7 +4,9 @@ Foo = Typeclass.new a: Object do
   fn :foo, [:a]
 end
 
-Bar = Typeclass.new Foo[:a], a: Object do
+Bar = Typeclass.new a: Object do
+  include Foo[:a]
+
   fn :bar, [:a]
 end
 

@@ -83,11 +83,10 @@ class TestInstance < Minitest::Test
     Typeclass.instance ImplementedSuperclass, a: Integer do end
     Typeclass.instance NotImplementedSuperclass, a: String do end
 
-    SomeTypeclass = Typeclass.new(
-      ImplementedSuperclass[:a],
-      NotImplementedSuperclass[:a],
-      a: Object
-    ) do end
+    SomeTypeclass = Typeclass.new a: Object do
+      include ImplementedSuperclass[:a]
+      include NotImplementedSuperclass[:a]
+    end
 
     assert_raises(NotImplementedError) do
       Typeclass.instance SomeTypeclass, a: Integer do end
