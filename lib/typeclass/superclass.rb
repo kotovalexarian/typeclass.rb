@@ -29,6 +29,8 @@ class Typeclass < Module
     # @param raw_params [Hash] Type parameters.
     # @return [Boolean] Is typeclass implemented.
     #
+    # @api private
+    #
     def implemented?(raw_params) # rubocop:disable Metrics/AbcSize
       params = args.map { |arg| raw_params[arg] }
 
@@ -47,6 +49,7 @@ class Typeclass < Module
     module TypeclassMixin
       # @!attribute [r] superclasses
       # @return [Array<Typeclass::Superclass>] Type class superclasses.
+      # @api private
       def superclasses
         @superclasses ||= []
       end

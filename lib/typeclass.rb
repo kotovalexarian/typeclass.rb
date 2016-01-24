@@ -14,6 +14,7 @@ class Typeclass < Module
 
   # @!attribute [r] constraints
   # @return [Hash] Type parameter constraints.
+  # @api private
   attr_reader :constraints
 
   # Create new typeclass.

@@ -3,6 +3,8 @@ class Typeclass < Module
   # Generic function.
   #
   class Function
+    attr_reader :typeclass, :name, :sig, :block
+
     def initialize(typeclass, name, sig, &block)
       @typeclass = typeclass
       @name = name
@@ -25,9 +27,5 @@ class Typeclass < Module
     def to_proc
       method(:call)
     end
-
-  private
-
-    attr_reader :typeclass, :name, :sig, :block
   end
 end

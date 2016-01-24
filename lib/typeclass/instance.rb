@@ -31,12 +31,9 @@ class Typeclass < Module
     # Typeclass extension for instances.
     #
     module TypeclassMixin
-      def self.included(base)
-        base.send :private, :get_index!
-      end
-
       # @!attribute [r] instances
       # @return [Array<Typeclass::Instance>] Type class instances.
+      # @api private
       def instances
         @instances ||= []
       end
@@ -108,6 +105,8 @@ class Typeclass < Module
       # @return [Integer] Index for new instance in array of instances.
       #
       # @raise [TypeError] Collision with existing instance.
+      #
+      # @api private
       #
       def get_index!(params)
         (0..instances.count).each do |i|
