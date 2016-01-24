@@ -95,16 +95,8 @@ class Typeclass < Module
       # @api private
       #
       def inherit(superclass)
-        typeclass = superclass.typeclass
-
-        typeclass.singleton_methods.each do |method_name|
-          p = typeclass.method method_name
-
-          define_singleton_method method_name, &p
-          define_method method_name, &p
-        end
-
-        typeclass.superclasses.each(&method(:inherit))
+        superclass.typeclass.functions.each(&method(:defun))
+        superclass.typeclass.superclasses.each(&method(:inherit))
       end
 
       # Check if superclasses are implemented for typeclass instance's params.
