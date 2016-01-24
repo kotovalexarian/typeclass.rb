@@ -9,6 +9,8 @@ require 'typeclass/superclass'
 class Typeclass < Module
   include Superclass::TypeclassMixin
 
+  extend Instance::TypeclassMixin::ClassMethods
+
   # @!attribute [r] constraints
   # @return [Hash] Type parameter constraints.
   attr_reader :constraints
@@ -82,24 +84,6 @@ class Typeclass < Module
     instances.insert index, instance
 
     instance
-  end
-
-  # Create new instance of type class.
-  #
-  # @see #instance
-  #
-  # @param typeclass [Typeclass] Type class.
-  # @param raw_params [Hash] Type parameters.
-  # @yield Opens module for function implementations.
-  # @return [Typeclass::Instance] New instance of type class.
-  #
-  # @note
-  #   Exceptions raised by this method should stay unhandled.
-  #
-  def self.instance(typeclass, raw_params, &block)
-    fail TypeError unless typeclass.is_a? Typeclass
-
-    typeclass.instance raw_params, &block
   end
 
   # Get type class instance for function with signature `sig`
