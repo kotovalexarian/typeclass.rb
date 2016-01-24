@@ -47,7 +47,9 @@ class Typeclass < Module
     module TypeclassMixin
       # @!attribute [r] superclasses
       # @return [Array<Typeclass::Superclass>] Type class superclasses.
-      attr_reader :superclasses
+      def superclasses
+        @superclasses ||= []
+      end
 
       # Create superclass for typeclass constructor.
       #

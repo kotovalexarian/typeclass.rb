@@ -34,7 +34,6 @@ class Typeclass < Module
 
     Typeclass.check_constraints! constraints
 
-    @superclasses = []
     @constraints = constraints
     @instances = []
 
