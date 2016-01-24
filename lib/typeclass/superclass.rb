@@ -5,10 +5,12 @@ class Typeclass < Module
   class Superclass
     # @!attribute [r] typeclass
     # @return [Typeclass] Type class.
+    # @api private
     attr_reader :typeclass
 
     # @!attribute [r] args
     # @return [Array<Symbol>] Args.
+    # @api private
     attr_reader :args
 
     # Create superclass for typeclass constructor.
@@ -70,6 +72,9 @@ class Typeclass < Module
       # @return [void]
       #
       # @raise [TypeError, ArgumentError]
+      #
+      # @note
+      #   Exceptions raised by this method should stay unhandled.
       #
       def include(superclass)
         fail TypeError unless superclass.is_a? Superclass
