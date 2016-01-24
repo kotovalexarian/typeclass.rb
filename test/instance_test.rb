@@ -3,11 +3,12 @@
 require_relative 'helper'
 
 class TestInstance < Minitest::Test
-  Bar = Typeclass.new :a, :b, :c, {
+  Bar = Typeclass.new(
+    :a, :b, :c,
     a: Integer,
     b: Enumerable,
     c: Comparable,
-  } do end
+  ) do end
 
   Baz = Typeclass.new :a do end
 

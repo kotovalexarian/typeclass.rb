@@ -5,13 +5,13 @@ AllCops:
 Style/MultilineOperationIndentation:
   Enabled: false
 
-Style/BracesAroundHashParameters:
-  Enabled: false
-
 Style/RescueModifier:
   Enabled: false
 
 Style/AndOr:
+  Enabled: false
+
+Style/TrailingCommaInArguments:
   Enabled: false
 
 Style/TrailingCommaInLiteral:
