@@ -17,13 +17,13 @@ class TestBehavior < Minitest::Test
     Eq1 = Struct.new(:n)
     Eq2 = Struct.new(:n)
 
-    Typeclass.instance Eq, Eq1 do
+    Eq.instance Eq1 do
       def equals(a1, a2)
         a1.n == a2.n
       end
     end
 
-    Typeclass.instance Eq, Eq2 do
+    Eq.instance Eq2 do
       def noteq(a1, a2)
         a1.n != a2.n
       end
@@ -75,7 +75,7 @@ class TestBehavior < Minitest::Test
       include Bool
     end
 
-    Typeclass.instance Ord, Bool do
+    Ord.instance Bool do
       V = { false => 0, true => 1 }.freeze
 
       def cmp(a1, a2)
@@ -106,13 +106,13 @@ class TestBehavior < Minitest::Test
       fn :foo, [:a, :b]
     end
 
-    Typeclass.instance Tst, Numeric, Numeric do
+    Tst.instance Numeric, Numeric do
       def foo(_a, _b)
         fail
       end
     end
 
-    Typeclass.instance Tst, Numeric, Integer do
+    Tst.instance Numeric, Integer do
       def foo(_a, _b)
         :second
       end
@@ -129,7 +129,7 @@ class TestBehavior < Minitest::Test
       fn :car, [] { :car_result }
     end
 
-    Typeclass.instance A, String do
+    A.instance String do
       def bar
         :bar_result
       end
@@ -150,7 +150,7 @@ class TestBehavior < Minitest::Test
       end
     end
 
-    Typeclass.instance B, Object do
+    B.instance Object do
       def foo
         :overloaded
       end
@@ -168,7 +168,7 @@ class TestBehavior < Minitest::Test
       end
     end
 
-    Typeclass.instance Foo, Integer do
+    Foo.instance Integer do
       def foo(a)
         bar(a + 1)
       end
@@ -200,13 +200,13 @@ class TestBehavior < Minitest::Test
       fn :cdr2, [:a]
     end
 
-    Typeclass.instance Bar, Integer do
+    Bar.instance Integer do
     end
 
-    Typeclass.instance Car, Integer do
+    Car.instance Integer do
     end
 
-    Typeclass.instance Cdr, Integer do
+    Cdr.instance Integer do
       def cdr2(a)
         bar(a + 2)
       end
