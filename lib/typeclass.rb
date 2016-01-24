@@ -8,10 +8,7 @@ require 'typeclass/superclass'
 #
 class Typeclass < Module
   include Superclass::TypeclassMixin
-
-  extend Instance::TypeclassMixin::ClassMethods
   include Instance::TypeclassMixin
-
   include Function::TypeclassMixin
 
   # Available constraint types.
