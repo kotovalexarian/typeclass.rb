@@ -5,10 +5,12 @@ class Typeclass < Module
   class Superclass
     # @!attribute [r] typeclass
     # @return [Typeclass] Type class.
+    # @api private
     attr_reader :typeclass
 
     # @!attribute [r] args
     # @return [Array<Symbol>] Args.
+    # @api private
     attr_reader :args
 
     # Create superclass for typeclass constructor.
@@ -29,6 +31,8 @@ class Typeclass < Module
     # @param raw_params [Hash] Type parameters.
     # @return [Boolean] Is typeclass implemented.
     #
+    # @api private
+    #
     def implemented?(raw_params) # rubocop:disable Metrics/AbcSize
       params = args.map { |arg| raw_params[arg] }
 
@@ -47,7 +51,10 @@ class Typeclass < Module
     module TypeclassMixin
       # @!attribute [r] superclasses
       # @return [Array<Typeclass::Superclass>] Type class superclasses.
-      attr_reader :superclasses
+      # @api private
+      def superclasses
+        @superclasses ||= []
+      end
 
       # Create superclass for typeclass constructor.
       #
@@ -65,6 +72,9 @@ class Typeclass < Module
       # @return [void]
       #
       # @raise [TypeError, ArgumentError]
+      #
+      # @note
+      #   Exceptions raised by this method should stay unhandled.
       #
       def include(superclass)
         fail TypeError unless superclass.is_a? Superclass
@@ -85,16 +95,8 @@ class Typeclass < Module
       # @api private
       #
       def inherit(superclass)
-        typeclass = superclass.typeclass
-
-        typeclass.singleton_methods.each do |method_name|
-          p = typeclass.method method_name
-
-          define_singleton_method method_name, &p
-          define_method method_name, &p
-        end
-
-        typeclass.superclasses.each(&method(:inherit))
+        superclass.typeclass.functions.each(&method(:defun))
+        superclass.typeclass.superclasses.each(&method(:inherit))
       end
 
       # Check if superclasses are implemented for typeclass instance's params.

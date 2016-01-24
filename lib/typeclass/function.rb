@@ -3,6 +3,8 @@ class Typeclass < Module
   # Generic function.
   #
   class Function
+    attr_reader :typeclass, :name, :sig, :block
+
     def initialize(typeclass, name, sig, &block)
       @typeclass = typeclass
       @name = name
@@ -26,8 +28,64 @@ class Typeclass < Module
       method(:call)
     end
 
-  private
+    ##
+    # Typeclass extension for function.
+    #
+    module TypeclassMixin
+      # @!attribute [r] functions
+      # @return [Array<Typeclass::Function>] Typeclass' functions.
+      # @api private
+      def functions
+        @functions ||= []
+      end
 
-    attr_reader :typeclass, :name, :sig, :block
+      # Declare function signature with optional default block.
+      #
+      # @example
+      #   Foo = Typeclass.new a: Enumerable do
+      #     fn :no_default, [:a]
+      #     fn :with_default, [:a] do |a|
+      #       a.first
+      #     end
+      #   end
+      #
+      #   Foo.instance a: Array do end
+      #
+      #   Foo.with_default ['a', 'b', 'c'] #=> "a"
+      #   Foo.no_defalt ['a', 'b', 'c']    # raises `NoMethodError`
+      #
+      # @param name [Symbol, String] Function name.
+      # @param sig [Array<Symbol>] Function signature.
+      # @yield Optional default block.
+      # @return [void]
+      #
+      # @note
+      #   Exceptions raised by this method should stay unhandled.
+      #
+      def fn(name, sig, &block)
+        name = name.to_sym rescue (raise NameError)
+        fail NameError if method_defined? name
+        fail TypeError unless sig.is_a? Array
+        fail TypeError unless sig.all? { |item| item.is_a? Symbol }
+
+        functions << f = Function.new(self, name, sig, &block)
+
+        defun f
+      end
+
+      # Define function instance on typeclass.
+      #
+      # @param function [Typeclass::Function] Generic function instance.
+      # @return [void]
+      #
+      # @api private
+      #
+      def defun(function)
+        p = function.to_proc
+
+        define_singleton_method function.name, &p
+        define_method function.name, &p
+      end
+    end
   end
 end

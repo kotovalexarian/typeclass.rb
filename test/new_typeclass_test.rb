@@ -39,6 +39,32 @@ class TestNewTypeclass < Minitest::Test
     Typeclass.new a: Integer, b: String do end
   end
 
+  deftest :typeclass_has_functions do
+    ABCD = Typeclass.new a: Object do
+      fn :qwe, [:a]
+      fn :rty, [:a, :a] do |a1, a2|
+        [a1, a2]
+      end
+    end
+
+    assert_equal 2, ABCD.functions.count
+
+    assert_instance_of Typeclass::Function, ABCD.functions[0]
+    assert_instance_of Typeclass::Function, ABCD.functions[1]
+
+    assert_equal ABCD, ABCD.functions[0].typeclass
+    assert_equal ABCD, ABCD.functions[1].typeclass
+
+    assert_equal :qwe, ABCD.functions[0].name
+    assert_equal :rty, ABCD.functions[1].name
+
+    assert_equal [:a], ABCD.functions[0].sig
+    assert_equal [:a, :a], ABCD.functions[1].sig
+
+    assert_equal nil, ABCD.functions[0].block
+    assert_equal [123, 456], ABCD.functions[1].block.call(123, 456)
+  end
+
   deftest :typeclass_checks_superclass_arguments do
     Cdr = Typeclass.new a: Object do end
 
