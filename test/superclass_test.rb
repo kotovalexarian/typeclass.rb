@@ -1,10 +1,10 @@
 require_relative 'helper'
 
 class TestSuperclass < Minitest::Test
-  Foo = Typeclass.new a: Object do
+  Foo = Typeclass.new :a do
   end
 
-  FooBar = Typeclass.new a: Object, b: Object do
+  FooBar = Typeclass.new :a, :b do
   end
 
   def test_constructor # rubocop:disable Metrics/AbcSize, Metrics/MethodLength

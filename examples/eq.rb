@@ -3,7 +3,7 @@ require 'typeclass'
 # Class Data.Eq from Haskell standard library
 # https://hackage.haskell.org/package/base-4.8.1.0/docs/Data-Eq.html
 
-Eq = Typeclass.new a: Object do
+Eq = Typeclass.new :a do
   fn :equal, [:a, :a] do |a1, a2|
     !noteq(a1, a2)
   end

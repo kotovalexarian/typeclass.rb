@@ -1,10 +1,10 @@
 require 'typeclass'
 
-Foo = Typeclass.new a: Object do
+Foo = Typeclass.new :a do
   fn :foo, [:a]
 end
 
-Bar = Typeclass.new a: Object do
+Bar = Typeclass.new :a do
   include Foo[:a]
 
   fn :bar, [:a]
