@@ -69,8 +69,6 @@ class Typeclass < Module
 
         raw_params = Instance::Params.pos_to_raw! pos_params, constraints
 
-        Instance::Params.check_raw_params! raw_params, constraints
-
         check_superclasses_implemented! raw_params
 
         params = Instance::Params.new(raw_params)
