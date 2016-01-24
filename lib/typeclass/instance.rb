@@ -57,17 +57,17 @@ class Typeclass < Module
       #     end
       #   end
       #
-      # @param raw_params [Array<Class>] Type parameters.
+      # @param pos_params [Array<Class>] Type parameters.
       # @yield Opens module for function implementations.
       # @return [Typeclass::Instance] New instance of type class.
       #
       # @note
       #   Exceptions raised by this method should stay unhandled.
       #
-      def instance(*raw_params, &block)
+      def instance(*pos_params, &block)
         fail LocalJumpError, 'no block given' unless block_given?
 
-        raw_params = Instance::Params.pos_to_raw! raw_params, constraints
+        raw_params = Instance::Params.pos_to_raw! pos_params, constraints
 
         Instance::Params.check_raw_params! raw_params, constraints
 
@@ -129,17 +129,17 @@ class Typeclass < Module
         # @see #instance
         #
         # @param typeclass [Typeclass] Type class.
-        # @param raw_params [Array<Class>] Type parameters.
+        # @param pos_params [Array<Class>] Type parameters.
         # @yield Opens module for function implementations.
         # @return [Typeclass::Instance] New instance of type class.
         #
         # @note
         #   Exceptions raised by this method should stay unhandled.
         #
-        def instance(typeclass, *raw_params, &block)
+        def instance(typeclass, *pos_params, &block)
           fail TypeError unless typeclass.is_a? Typeclass
 
-          typeclass.instance(*raw_params, &block)
+          typeclass.instance(*pos_params, &block)
         end
       end
     end
