@@ -14,6 +14,14 @@ class Typeclass < Module
 
   include Function::TypeclassMixin
 
+  # Available constraint types.
+  # @see type?
+  TYPES = [Class, Module].freeze
+
+  # Type used for no constraint.
+  # @see Typeclass::Instance::Params.check_raw_params!
+  BASE_CLASS = Object
+
   # @!attribute [r] constraints
   # @return [Hash] Type parameter constraints.
   # @api private
@@ -74,14 +82,4 @@ class Typeclass < Module
       fail TypeError unless Typeclass.type? type
     end
   end
-
-private
-
-  # Available constraint types.
-  # @see type?
-  TYPES = [Class, Module].freeze
-
-  # Type used for no constraint.
-  # @see Typeclass::Instance::Params.check_raw_params!
-  BASE_CLASS = Object
 end
