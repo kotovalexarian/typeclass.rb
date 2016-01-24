@@ -35,7 +35,7 @@ gem install typeclass
 or add to your `Gemfile`
 
 ```ruby
-gem 'typeclass', '~> 0.2.0'
+gem 'typeclass', '~> 0.3.0'
 ```
 
 To learn how to use the gem look at the [examples](/examples/).
