@@ -67,12 +67,7 @@ class Typeclass < Module
       def instance(*raw_params, &block)
         fail LocalJumpError, 'no block given' unless block_given?
 
-        fail ArgumentError if raw_params.empty?
-
-        raw_params = raw_params.each_with_index.map do |param, index|
-          fail TypeError unless Typeclass.type? param
-          { constraints.keys[index] => param }
-        end.inject(&:merge)
+        raw_params = Instance::Params.pos_to_raw! raw_params, constraints
 
         Instance::Params.check_raw_params! raw_params, constraints
 

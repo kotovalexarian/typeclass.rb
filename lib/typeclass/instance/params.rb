@@ -25,6 +25,15 @@ class Typeclass < Module
         data[name]
       end
 
+      def self.pos_to_raw!(pos_params, constraints)
+        fail ArgumentError if pos_params.empty?
+
+        pos_params.each_with_index.map do |param, index|
+          fail TypeError unless Typeclass.type? param
+          { constraints.keys[index] => param }
+        end.inject(&:merge)
+      end
+
       def self.check_raw_params!(raw_params, # rubocop:disable Metrics/AbcSize
                                  constraints)
         fail TypeError unless raw_params.is_a? Hash
