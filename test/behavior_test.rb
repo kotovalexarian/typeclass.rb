@@ -4,7 +4,7 @@ require_relative 'helper'
 
 class TestBehavior < Minitest::Test
   deftest :'1' do
-    Eq = Typeclass.new a: Object do
+    Eq = Typeclass.new :a do
       fn :equals, [:a, :a] do |a1, a2|
         !noteq(a1, a2)
       end
@@ -37,7 +37,7 @@ class TestBehavior < Minitest::Test
   end
 
   deftest :'2' do
-    Ord = Typeclass.new a: Object do
+    Ord = Typeclass.new :a do
       fn :cmp, [:a, :a]
 
       fn :equals, [:a, :a] do |a1, a2|
@@ -102,7 +102,7 @@ class TestBehavior < Minitest::Test
   end
 
   deftest :choose_correct_instance_even_if_was_is_declared_later do
-    Tst = Typeclass.new a: Object, b: Object do
+    Tst = Typeclass.new :a, :b do
       fn :foo, [:a, :b]
     end
 
@@ -122,7 +122,7 @@ class TestBehavior < Minitest::Test
   end
 
   deftest :method_instantiates_correctly do
-    A = Typeclass.new a: Object do
+    A = Typeclass.new :a do
       fn :foo, [:a]
 
       fn :bar, []
@@ -144,7 +144,7 @@ class TestBehavior < Minitest::Test
   end
 
   deftest :method_overloads_correclty do
-    B = Typeclass.new a: Object do
+    B = Typeclass.new :a do
       fn :foo, [] do
         fail
       end
@@ -160,7 +160,7 @@ class TestBehavior < Minitest::Test
   end
 
   deftest :typeclass_is_visible_in_hidden_module do
-    Foo = Typeclass.new a: Numeric do
+    Foo = Typeclass.new :a, a: Numeric do
       fn :foo, [:a]
 
       fn :bar, [:a] do |a|
@@ -178,19 +178,19 @@ class TestBehavior < Minitest::Test
   end
 
   deftest :deep_inheritance do
-    Bar = Typeclass.new a: Numeric do
+    Bar = Typeclass.new :a, a: Numeric do
       fn :bar, [:a] do |a|
         a * 2
       end
     end
 
-    Car = Typeclass.new a: Object do
+    Car = Typeclass.new :a do
       include Bar[:a]
 
       fn :car, [:a]
     end
 
-    Cdr = Typeclass.new a: Numeric do
+    Cdr = Typeclass.new :a, a: Numeric do
       include Car[:a]
 
       fn :cdr, [:a] do |a|

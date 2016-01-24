@@ -30,21 +30,24 @@ class Typeclass < Module
   # Create new typeclass.
   #
   # @example
-  #   Foo = Typeclass.new a: Object do
+  #   Foo = Typeclass.new :a do
   #   end
   #
-  # @param constraints [Hash] Type parameter constraints.
+  #   Bar = Typeclass.new a: Numeric do
+  #   end
+  #
   # @yield Opens type class as module.
   #
   # @note
   #   Exceptions raised by this method should stay unhandled.
   #
-  def initialize(constraints, &block)
+  def initialize(*args, &block)
     fail LocalJumpError, 'no block given' unless block_given?
 
-    Typeclass.check_constraints! constraints
+    keys = args.dup
+    options = keys.pop if args.last.is_a? Hash
 
-    @constraints = constraints
+    @constraints = Typeclass.args_to_constraints! keys, options || {}
 
     instance_exec(&block)
   end
@@ -62,24 +65,25 @@ class Typeclass < Module
     TYPES.any? { |type| object.is_a? type }
   end
 
-  # Check if type parameter constraints have valid format.
-  # Raise exceptions if format is invalid.
-  #
-  # @param constraints [Hash] Type parameter constraints.
-  # @return [void]
+  # @param args [Array<Symbol>]
+  # @param options [Hash<Symbol, type>]
+  # @return [Hash<Symbol, type>]
   #
   # @raise [TypeError, ArgumentError]
   #
   # @api private
   #
-  def self.check_constraints!(constraints)
-    fail TypeError unless constraints.is_a? Hash
-    fail ArgumentError if constraints.empty?
+  def self.args_to_constraints!(keys, options)
+    fail ArgumentError if keys.empty?
+    fail TypeError unless keys.all? { |key| key.is_a? Symbol }
 
-    constraints.each do |name, type|
-      name.is_a? Symbol or
-        fail TypeError, 'parameter name is not a Symbol'
-      fail TypeError unless Typeclass.type? type
+    options.each do |key, type|
+      fail ArgumentError unless keys.include? key
+      fail TypeError unless type? type
     end
+
+    keys.map do |arg|
+      { arg => BASE_CLASS }
+    end.inject(&:merge).merge options
   end
 end

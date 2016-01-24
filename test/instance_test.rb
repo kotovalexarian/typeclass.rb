@@ -3,8 +3,14 @@
 require_relative 'helper'
 
 class TestInstance < Minitest::Test
-  Bar = Typeclass.new a: Integer, b: Enumerable, c: Comparable do end
-  Baz = Typeclass.new a: Object do end
+  Bar = Typeclass.new(
+    :a, :b, :c,
+    a: Integer,
+    b: Enumerable,
+    c: Comparable,
+  ) do end
+
+  Baz = Typeclass.new :a do end
 
   deftest :arguments_count do
     assert_raises(ArgumentError) { Typeclass.instance do end }
@@ -38,7 +44,7 @@ class TestInstance < Minitest::Test
   end
 
   deftest :collision_of_parameters do
-    Car = Typeclass.new a: Object, b: Object do end
+    Car = Typeclass.new :a, :b do end
 
     Typeclass.instance Car, Numeric, Integer do end
 
@@ -48,7 +54,7 @@ class TestInstance < Minitest::Test
   end
 
   deftest :instances_order do
-    Cdr = Typeclass.new a: Object, b: Object do end
+    Cdr = Typeclass.new :a, :b do end
 
     cdr1 = Typeclass.instance Cdr, Numeric, Numeric do end
     cdr2 = Typeclass.instance Cdr, Integer, Integer do end
@@ -68,13 +74,13 @@ class TestInstance < Minitest::Test
   end
 
   deftest :instantiation_checks_if_superclasses_are_implemented do
-    ImplementedSuperclass = Typeclass.new a: Object do end
-    NotImplementedSuperclass = Typeclass.new a: Object do end
+    ImplementedSuperclass = Typeclass.new :a do end
+    NotImplementedSuperclass = Typeclass.new :a do end
 
     Typeclass.instance ImplementedSuperclass, Integer do end
     Typeclass.instance NotImplementedSuperclass, String do end
 
-    SomeTypeclass = Typeclass.new a: Object do
+    SomeTypeclass = Typeclass.new :a do
       include ImplementedSuperclass[:a]
       include NotImplementedSuperclass[:a]
     end

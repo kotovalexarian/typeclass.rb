@@ -3,7 +3,7 @@
 
 require 'typeclass'
 
-Animal = Typeclass.new a: Object do
+Animal = Typeclass.new :a do
   fn :name, [:a]
   fn :noise, [:a]
 
