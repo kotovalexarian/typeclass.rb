@@ -12,6 +12,8 @@ class Typeclass < Module
   extend Instance::TypeclassMixin::ClassMethods
   include Instance::TypeclassMixin
 
+  include Function::TypeclassMixin
+
   # @!attribute [r] constraints
   # @return [Hash] Type parameter constraints.
   # @api private
@@ -82,38 +84,4 @@ private
   # Type used for no constraint.
   # @see Typeclass::Instance::Params.check_raw_params!
   BASE_CLASS = Object
-
-  # Declare function signature with optional default block.
-  #
-  # @example
-  #   Foo = Typeclass.new a: Enumerable do
-  #     fn :no_default, [:a]
-  #     fn :with_default, [:a] do |a|
-  #       a.first
-  #     end
-  #   end
-  #
-  #   Foo.instance a: Array do end
-  #
-  #   Foo.with_default ['a', 'b', 'c'] #=> "a"
-  #   Foo.no_defalt ['a', 'b', 'c']    # raises `NoMethodError`
-  #
-  # @param name [Symbol, String] Function name.
-  # @param sig [Array<Symbol>] Function signature.
-  # @yield Optional default block.
-  #
-  # @note
-  #   Exceptions raised by this method should stay unhandled.
-  #
-  def fn(name, sig, &block)
-    name = name.to_sym rescue (raise NameError)
-    fail NameError if method_defined? name
-    fail TypeError unless sig.is_a? Array
-    fail TypeError unless sig.all? { |item| item.is_a? Symbol }
-
-    p = Function.new(self, name, sig, &block).to_proc
-
-    define_singleton_method name, &p
-    define_method name, &p
-  end
 end
