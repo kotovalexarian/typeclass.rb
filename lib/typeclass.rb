@@ -33,14 +33,26 @@ class Typeclass < Module
   #   Foo = Typeclass.new a: Object do
   #   end
   #
-  # @param constraints [Hash] Type parameter constraints.
+  # @param type_vars [Array<Symbol>] Type variables.
+  # @param options [Hash] Type variable constraints.
   # @yield Opens type class as module.
   #
   # @note
   #   Exceptions raised by this method should stay unhandled.
   #
-  def initialize(constraints, &block)
+  def initialize(*args, &block)
     fail LocalJumpError, 'no block given' unless block_given?
+
+    options = args.pop if args.last.is_a? Hash
+    options ||= {}
+
+    fail ArgumentError if args.empty?
+    fail TypeError unless args.all? { |arg| arg.is_a? Symbol }
+    fail ArgumentError unless options.keys.all? { |key| args.include? key }
+
+    constraints = args.map do |arg|
+      { arg => BASE_CLASS }
+    end.inject(&:merge).merge options
 
     Typeclass.check_constraints! constraints
 
