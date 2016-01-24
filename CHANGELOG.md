@@ -1,5 +1,22 @@
 # Change Log
 
+## [v0.3.0](https://github.com/braiden-vasco/typeclass.rb/tree/v0.3.0) (2016-01-24)
+[Full Changelog](https://github.com/braiden-vasco/typeclass.rb/compare/v0.2.0...v0.3.0)
+
+**Closed issues:**
+
+- Remove one of instance syntaxes [\#23](https://github.com/braiden-vasco/typeclass.rb/issues/23)
+- Positional type variables [\#17](https://github.com/braiden-vasco/typeclass.rb/issues/17)
+- Positional type parameters [\#16](https://github.com/braiden-vasco/typeclass.rb/issues/16)
+
+**Merged pull requests:**
+
+- Remove one of instance syntaxes [\#24](https://github.com/braiden-vasco/typeclass.rb/pull/24) ([braiden-vasco](https://github.com/braiden-vasco))
+- Positional type variables [\#22](https://github.com/braiden-vasco/typeclass.rb/pull/22) ([braiden-vasco](https://github.com/braiden-vasco))
+- Positional type parameters [\#21](https://github.com/braiden-vasco/typeclass.rb/pull/21) ([braiden-vasco](https://github.com/braiden-vasco))
+- Refactoring [\#20](https://github.com/braiden-vasco/typeclass.rb/pull/20) ([braiden-vasco](https://github.com/braiden-vasco))
+- Inheritance by include [\#15](https://github.com/braiden-vasco/typeclass.rb/pull/15) ([braiden-vasco](https://github.com/braiden-vasco))
+
 ## [v0.2.0](https://github.com/braiden-vasco/typeclass.rb/tree/v0.2.0) (2016-01-18)
 [Full Changelog](https://github.com/braiden-vasco/typeclass.rb/compare/v0.1.1...v0.2.0)
 
