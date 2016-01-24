@@ -76,6 +76,11 @@ class TestInstance < Minitest::Test
     Typeclass.instance Bar, a: Integer, b: Array, c: Integer do end
   end
 
+  deftest :instances_are_created_successful_with_alternative_syntax do
+    Bar.instance a: Integer, b: Hash, c: Float do end
+    Bar.instance a: Integer, b: Array, c: Float do end
+  end
+
   deftest :instantiation_checks_if_superclasses_are_implemented do
     ImplementedSuperclass = Typeclass.new a: Object do end
     NotImplementedSuperclass = Typeclass.new a: Object do end
