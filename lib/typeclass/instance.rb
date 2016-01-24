@@ -45,29 +45,29 @@ class Typeclass < Module
       #     fn :format, [:a]
       #   end
       #
-      #   Formatter.instance a: Integer do
+      #   Formatter.instance Integer do
       #     def format(a)
       #       "exactly #{a}"
       #     end
       #   end
       #
-      #   Formatter.instance a: Float do
+      #   Formatter.instance Float do
       #     def format(a)
       #       "about #{a.round 2}"
       #     end
       #   end
       #
-      # @param raw_params [Hash] Type parameters.
+      # @param pos_params [Array<Class>] Type parameters.
       # @yield Opens module for function implementations.
       # @return [Typeclass::Instance] New instance of type class.
       #
       # @note
       #   Exceptions raised by this method should stay unhandled.
       #
-      def instance(raw_params, &block)
+      def instance(*pos_params, &block)
         fail LocalJumpError, 'no block given' unless block_given?
 
-        Instance::Params.check_raw_params! raw_params, constraints
+        raw_params = Instance::Params.pos_to_raw! pos_params, constraints
 
         check_superclasses_implemented! raw_params
 
@@ -127,17 +127,17 @@ class Typeclass < Module
         # @see #instance
         #
         # @param typeclass [Typeclass] Type class.
-        # @param raw_params [Hash] Type parameters.
+        # @param pos_params [Array<Class>] Type parameters.
         # @yield Opens module for function implementations.
         # @return [Typeclass::Instance] New instance of type class.
         #
         # @note
         #   Exceptions raised by this method should stay unhandled.
         #
-        def instance(typeclass, raw_params, &block)
+        def instance(typeclass, *pos_params, &block)
           fail TypeError unless typeclass.is_a? Typeclass
 
-          typeclass.instance raw_params, &block
+          typeclass.instance(*pos_params, &block)
         end
       end
     end

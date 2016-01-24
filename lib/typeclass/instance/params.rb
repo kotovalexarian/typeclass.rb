@@ -25,15 +25,17 @@ class Typeclass < Module
         data[name]
       end
 
-      def self.check_raw_params!(raw_params, # rubocop:disable Metrics/AbcSize
-                                 constraints)
-        fail TypeError unless raw_params.is_a? Hash
-        fail ArgumentError unless (constraints.keys - raw_params.keys).empty?
-        fail ArgumentError unless (raw_params.keys - constraints.keys).empty?
+      def self.pos_to_raw!(pos_params, # rubocop:disable Metrics/AbcSize
+                           constraints)
+        fail ArgumentError unless pos_params.count == constraints.count
 
-        fail TypeError unless raw_params.all? do |name, type|
-          (type.ancestors + [BASE_CLASS]).include? constraints[name]
-        end
+        pos_params.each_with_index.map do |param, index|
+          fail TypeError unless Typeclass.type? param and
+                                (param.ancestors + [BASE_CLASS]).include?(
+                                  constraints[constraints.keys[index]])
+
+          { constraints.keys[index] => param }
+        end.inject(&:merge)
       end
     end
   end
