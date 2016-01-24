@@ -32,6 +32,13 @@ class Typeclass < Module
     # Typeclass extension for function.
     #
     module TypeclassMixin
+      # @!attribute [r] functions
+      # @return [Array<Typeclass::Function>] Typeclass' functions.
+      # @api private
+      def functions
+        @functions ||= []
+      end
+
       # Declare function signature with optional default block.
       #
       # @example
@@ -60,7 +67,9 @@ class Typeclass < Module
         fail TypeError unless sig.is_a? Array
         fail TypeError unless sig.all? { |item| item.is_a? Symbol }
 
-        p = Function.new(self, name, sig, &block).to_proc
+        functions << f = Function.new(self, name, sig, &block)
+
+        p = f.to_proc
 
         define_singleton_method name, &p
         define_method name, &p
