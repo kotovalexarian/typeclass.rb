@@ -17,13 +17,13 @@ class TestBehavior < Minitest::Test
     Eq1 = Struct.new(:n)
     Eq2 = Struct.new(:n)
 
-    Typeclass.instance Eq, a: Eq1 do
+    Typeclass.instance Eq, Eq1 do
       def equals(a1, a2)
         a1.n == a2.n
       end
     end
 
-    Typeclass.instance Eq, a: Eq2 do
+    Typeclass.instance Eq, Eq2 do
       def noteq(a1, a2)
         a1.n != a2.n
       end
@@ -75,7 +75,7 @@ class TestBehavior < Minitest::Test
       include Bool
     end
 
-    Typeclass.instance Ord, a: Bool do
+    Typeclass.instance Ord, Bool do
       V = { false => 0, true => 1 }.freeze
 
       def cmp(a1, a2)
@@ -106,13 +106,13 @@ class TestBehavior < Minitest::Test
       fn :foo, [:a, :b]
     end
 
-    Typeclass.instance Tst, a: Numeric, b: Numeric do
+    Typeclass.instance Tst, Numeric, Numeric do
       def foo(_a, _b)
         fail
       end
     end
 
-    Typeclass.instance Tst, a: Numeric, b: Integer do
+    Typeclass.instance Tst, Numeric, Integer do
       def foo(_a, _b)
         :second
       end
@@ -129,7 +129,7 @@ class TestBehavior < Minitest::Test
       fn :car, [] { :car_result }
     end
 
-    Typeclass.instance A, a: String do
+    Typeclass.instance A, String do
       def bar
         :bar_result
       end
@@ -150,7 +150,7 @@ class TestBehavior < Minitest::Test
       end
     end
 
-    Typeclass.instance B, a: Object do
+    Typeclass.instance B, Object do
       def foo
         :overloaded
       end
@@ -168,7 +168,7 @@ class TestBehavior < Minitest::Test
       end
     end
 
-    Typeclass.instance Foo, a: Integer do
+    Typeclass.instance Foo, Integer do
       def foo(a)
         bar(a + 1)
       end
@@ -200,13 +200,13 @@ class TestBehavior < Minitest::Test
       fn :cdr2, [:a]
     end
 
-    Typeclass.instance Bar, a: Integer do
+    Typeclass.instance Bar, Integer do
     end
 
-    Typeclass.instance Car, a: Integer do
+    Typeclass.instance Car, Integer do
     end
 
-    Typeclass.instance Cdr, a: Integer do
+    Typeclass.instance Cdr, Integer do
       def cdr2(a)
         bar(a + 2)
       end
