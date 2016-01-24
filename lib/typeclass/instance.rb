@@ -45,27 +45,34 @@ class Typeclass < Module
       #     fn :format, [:a]
       #   end
       #
-      #   Formatter.instance a: Integer do
+      #   Formatter.instance Integer do
       #     def format(a)
       #       "exactly #{a}"
       #     end
       #   end
       #
-      #   Formatter.instance a: Float do
+      #   Formatter.instance Float do
       #     def format(a)
       #       "about #{a.round 2}"
       #     end
       #   end
       #
-      # @param raw_params [Hash] Type parameters.
+      # @param raw_params [Array<Class>] Type parameters.
       # @yield Opens module for function implementations.
       # @return [Typeclass::Instance] New instance of type class.
       #
       # @note
       #   Exceptions raised by this method should stay unhandled.
       #
-      def instance(raw_params, &block)
+      def instance(*raw_params, &block)
         fail LocalJumpError, 'no block given' unless block_given?
+
+        fail ArgumentError if raw_params.empty?
+
+        raw_params = raw_params.each_with_index.map do |param, index|
+          fail TypeError unless Typeclass.type? param
+          { constraints.keys[index] => param }
+        end.inject(&:merge)
 
         Instance::Params.check_raw_params! raw_params, constraints
 
@@ -127,17 +134,17 @@ class Typeclass < Module
         # @see #instance
         #
         # @param typeclass [Typeclass] Type class.
-        # @param raw_params [Hash] Type parameters.
+        # @param raw_params [Array<Class>] Type parameters.
         # @yield Opens module for function implementations.
         # @return [Typeclass::Instance] New instance of type class.
         #
         # @note
         #   Exceptions raised by this method should stay unhandled.
         #
-        def instance(typeclass, raw_params, &block)
+        def instance(typeclass, *raw_params, &block)
           fail TypeError unless typeclass.is_a? Typeclass
 
-          typeclass.instance raw_params, &block
+          typeclass.instance(*raw_params, &block)
         end
       end
     end
