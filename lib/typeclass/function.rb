@@ -57,6 +57,7 @@ class Typeclass < Module
       # @param name [Symbol, String] Function name.
       # @param sig [Array<Symbol>] Function signature.
       # @yield Optional default block.
+      # @return [void]
       #
       # @note
       #   Exceptions raised by this method should stay unhandled.
@@ -69,10 +70,21 @@ class Typeclass < Module
 
         functions << f = Function.new(self, name, sig, &block)
 
-        p = f.to_proc
+        defun f
+      end
 
-        define_singleton_method name, &p
-        define_method name, &p
+      # Define function instance on typeclass.
+      #
+      # @param function [Typeclass::Function] Generic function instance.
+      # @return [void]
+      #
+      # @api private
+      #
+      def defun(function)
+        p = function.to_proc
+
+        define_singleton_method function.name, &p
+        define_method function.name, &p
       end
     end
   end
