@@ -29,7 +29,7 @@ end
 # Two complex numbers are equal if and only if
 # both their real and imaginary parts are equal.
 
-Typeclass.instance Eq, Cmplx do
+Eq.instance Cmplx do
   def equal(a1, a2)
     a1.real == a2.real && a1.imag == a2.imag
   end

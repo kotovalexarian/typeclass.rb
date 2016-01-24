@@ -74,13 +74,13 @@ Show = Typeclass.new :a do
   fn :show, [:a]
 end
 
-Typeclass.instance Show, Integer do
+Show.instance Integer do
   def show(a)
     "Integer(#{a})"
   end
 end
 
-Typeclass.instance Show, String do
+Show.instance String do
   def show(a)
     "String(#{a.dump})"
   end

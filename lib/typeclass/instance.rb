@@ -116,30 +116,6 @@ class Typeclass < Module
           return i if instance.params > params
         end
       end
-
-      ##
-      # Typeclass extension for instances
-      # (class methods).
-      #
-      module ClassMethods
-        # Create new instance of type class.
-        #
-        # @see #instance
-        #
-        # @param typeclass [Typeclass] Type class.
-        # @param pos_params [Array<Class>] Type parameters.
-        # @yield Opens module for function implementations.
-        # @return [Typeclass::Instance] New instance of type class.
-        #
-        # @note
-        #   Exceptions raised by this method should stay unhandled.
-        #
-        def instance(typeclass, *pos_params, &block)
-          fail TypeError unless typeclass.is_a? Typeclass
-
-          typeclass.instance(*pos_params, &block)
-        end
-      end
     end
   end
 end

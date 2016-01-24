@@ -10,13 +10,13 @@ Bar = Typeclass.new :a do
   fn :bar, [:a]
 end
 
-Typeclass.instance Foo, Integer do
+Foo.instance Integer do
   def foo(a)
     a * 2
   end
 end
 
-Typeclass.instance Bar, Integer do
+Bar.instance Integer do
   def bar(a)
     foo(a + 1)
   end

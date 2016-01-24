@@ -14,7 +14,7 @@ end
 
 Dog = Struct.new(:name)
 
-Typeclass.instance Animal, Dog do
+Animal.instance Dog do
   def name(a)
     a.name
   end
@@ -26,7 +26,7 @@ end
 
 Sheep = Struct.new(:name)
 
-Typeclass.instance Animal, Sheep do
+Animal.instance Sheep do
   def name(a)
     a.name
   end

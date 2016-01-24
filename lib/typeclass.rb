@@ -8,10 +8,7 @@ require 'typeclass/superclass'
 #
 class Typeclass < Module
   include Superclass::TypeclassMixin
-
-  extend Instance::TypeclassMixin::ClassMethods
   include Instance::TypeclassMixin
-
   include Function::TypeclassMixin
 
   # Available constraint types.
@@ -65,7 +62,7 @@ class Typeclass < Module
     TYPES.any? { |type| object.is_a? type }
   end
 
-  # @param args [Array<Symbol>]
+  # @param keys [Array<Symbol>]
   # @param options [Hash<Symbol, type>]
   # @return [Hash<Symbol, type>]
   #
