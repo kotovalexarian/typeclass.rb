@@ -70,17 +70,17 @@ Let's look at the following example and realize which parts of the code
 can be statically typed.
 
 ```ruby
-Show = Typeclass.new a: Object do
+Show = Typeclass.new :a do
   fn :show, [:a]
 end
 
-Typeclass.instance Show, a: Integer do
+Typeclass.instance Show, Integer do
   def show(a)
     "Integer(#{a})"
   end
 end
 
-Typeclass.instance Show, a: String do
+Typeclass.instance Show, String do
   def show(a)
     "String(#{a.dump})"
   end
